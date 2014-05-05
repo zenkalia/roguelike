@@ -1,6 +1,6 @@
 $(document).ready ->
   $('#game-window').html('')
-  for row in [1..20]
+  for row in [1..24]
     for col in [1..80]
       $('#game-window').append($('<span>', {
         id: "#{row}x#{col}",
