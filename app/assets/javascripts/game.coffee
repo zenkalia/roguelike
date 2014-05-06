@@ -8,17 +8,27 @@ $(document).ready ->
       }).append('&nbsp;'))
     $('#game-window').append('<br />')
   $('.cell').css('background-color', 'gray')
-  char = {}
+  window.char = {}
   char.r = 4
   char.c = 4
-  setChar(char.r, char.c, 'white', 'black', '@')
+  window.enemies = []
+  enemies.push {
+    r: 7
+    c: 7
+  }
+  draw()
   $(document).keypress (key) ->
     switch key.which
       when 104 then char.c -= 1
       when 106 then char.r += 1
       when 107 then char.r -= 1
       when 108 then char.c += 1
-    setChar(char.r, char.c, 'white', 'black', '@')
+    draw()
+
+draw = ->
+  setChar(char.r, char.c, 'white', 'black', '@')
+  for enemy in enemies
+    setChar(enemy.r, enemy.c, 'yellow', 'green', 'R')
 
 setChar = (row, col, bgColor, fgColor, character) ->
   cell = $("##{row}x#{col}")
