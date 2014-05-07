@@ -6,6 +6,16 @@ $(document).ready ->
     act: ->
       Game.engine.lock()
       window.addEventListener("keydown", this)
+    checkBox: ->
+      key = @x + "," + @y
+      if (Game.map[key] != "*")
+        alert("There is no box here!")
+      else if (key == Game.ananas)
+        alert("Hooray! You found an ananas and won this game.")
+        Game.engine.lock()
+        window.removeEventListener("keydown", this)
+      else
+        alert "This box is empty :-("
     handleEvent: (e) ->
       keyMap = {
         38: 0
@@ -18,9 +28,12 @@ $(document).ready ->
         36: 7
       }
 
-
       code = e.keyCode
       # alert code
+
+      if (code == 13 || code == 32)
+        this.checkBox()
+        return
 
       return if (!(code of keyMap))
 
@@ -29,7 +42,7 @@ $(document).ready ->
       newY = @y + diff[1]
 
       newKey = newX + "," + newY
-      #alert(newKey)
+      # alert(newKey)
       return if (!(newKey of Game.map))
 
       Game.display.draw(@x, @y, Game.map["#{@x},#{@y}"])
@@ -54,6 +67,7 @@ $(document).ready ->
   Game.map = {}
   Game.player = null
   Game.engine = null
+  Game.ananas = null
 
   Game._generateMap = ->
     digger = new ROT.Map.Digger
@@ -79,6 +93,7 @@ $(document).ready ->
       index = Math.floor(ROT.RNG.getUniform() * freeCells.length)
       key = freeCells.splice(index, 1)[0]
       this.map[key] = '*'
+      if (!i) then this.ananas = key
   Game._createPlayer = (freeCells) ->
     index = Math.floor(ROT.RNG.getUniform() * freeCells.length)
     key = freeCells.splice(index, 1)[0]
