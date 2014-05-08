@@ -4,6 +4,28 @@ $(document).ready ->
     draw: ->
       Game.display.draw(@x, @y, 'P', 'red')
     act: ->
+      x = Game.player.x
+      y = Game.player.y
+      passableCallback = (x, y) ->
+        "#{x},#{y}" of Game.map
+      astar = new ROT.Path.AStar(x, y, passableCallback, {topology:8})
+
+      path = []
+      pathCallback = (x, y) ->
+        path.push([x, y])
+      astar.compute(@x, @y, pathCallback)
+
+      path.shift() # remove Pedro's position
+      if (path.length == 1)
+        Game.engine.lock()
+        alert("Game over - you were captured by Pedro!")
+      else
+        x = path[0][0]
+        y = path[0][1]
+        Game.display.draw(@x, @y, Game.map[@x+","+@y])
+        @x = x
+        @y = y
+        this.draw()
   class Player
     constructor: (@x, @y) ->
     draw: ->
