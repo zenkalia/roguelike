@@ -1,4 +1,9 @@
 $(document).ready ->
+  class Pedro
+    constructor: (@x, @y) ->
+    draw: ->
+      Game.display.draw(@x, @y, 'P', 'red')
+    act: ->
   class Player
     constructor: (@x, @y) ->
     draw: ->
@@ -60,6 +65,7 @@ $(document).ready ->
       this._generateMap()
       scheduler = new ROT.Scheduler.Simple()
       scheduler.add(this.player, true)
+      scheduler.add(this.pedro, true)
       this.engine = new ROT.Engine(scheduler)
       this.engine.start()
   }
@@ -79,7 +85,8 @@ $(document).ready ->
       freeCells.push(key)
     digger.create(digCallback.bind(this))
     this._generateBoxes(freeCells)
-    this._createPlayer(freeCells)
+    this.player = this._createBeing(Player, freeCells)
+    this.pedro = this._createBeing(Pedro, freeCells)
     this._drawWholeMap()
   Game._drawWholeMap = ->
     for key, val of this.map
@@ -88,17 +95,18 @@ $(document).ready ->
       y = parseInt(parts[1], '10')
       this.display.draw(x, y, this.map[key])
       this.player.draw?()
+      this.pedro.draw?()
   Game._generateBoxes = (freeCells) ->
     for i in [0..10]
       index = Math.floor(ROT.RNG.getUniform() * freeCells.length)
       key = freeCells.splice(index, 1)[0]
       this.map[key] = '*'
       if (!i) then this.ananas = key
-  Game._createPlayer = (freeCells) ->
+  Game._createBeing = (what, freeCells) ->
     index = Math.floor(ROT.RNG.getUniform() * freeCells.length)
     key = freeCells.splice(index, 1)[0]
     parts = key.split(",")
     x = parseInt(parts[0], 10)
     y = parseInt(parts[1], 10)
-    this.player = new Player(x, y)
+    return new what(x, y)
   Game.init()
