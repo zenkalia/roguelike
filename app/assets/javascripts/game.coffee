@@ -47,7 +47,6 @@ $(document).ready ->
     handleEvent: (e) ->
       if e.type == 'keypress'
         keyMap = {
-          89: 7
           75: 0
           85: 1
           76: 2
@@ -55,14 +54,15 @@ $(document).ready ->
           74: 4
           66: 5
           72: 6
-          121: 7
+          89: 7
           107: 0
           117: 1
           108: 2
           110: 3
           106: 4
-          98: 5
+          98:  5
           104: 6
+          121: 7
         }
 
       if e.type == 'keydown'
