@@ -8,7 +8,7 @@ $(document).ready ->
       y = Game.player.y
       passableCallback = (x, y) ->
         "#{x},#{y}" of Game.map
-      astar = new ROT.Path.AStar(x, y, passableCallback, {topology:8})
+      astar = new ROT.Path.AStar(x, y, passableCallback, {topology:4})
 
       path = []
       pathCallback = (x, y) ->
@@ -33,6 +33,7 @@ $(document).ready ->
     act: ->
       Game.engine.lock()
       window.addEventListener("keydown", this)
+      window.addEventListener("keypress", this)
     checkBox: ->
       key = @x + "," + @y
       if (Game.map[key] != "*")
@@ -44,19 +45,39 @@ $(document).ready ->
       else
         alert "This box is empty :-("
     handleEvent: (e) ->
-      keyMap = {
-        38: 0
-        33: 1
-        39: 2
-        34: 3
-        40: 4
-        35: 5
-        37: 6
-        36: 7
-      }
+      if e.type == 'keypress'
+        keyMap = {
+          89: 7
+          75: 0
+          85: 1
+          76: 2
+          78: 3
+          74: 4
+          66: 5
+          72: 6
+          121: 7
+          107: 0
+          117: 1
+          108: 2
+          110: 3
+          106: 4
+          98: 5
+          104: 6
+        }
+
+      if e.type == 'keydown'
+        keyMap = {
+          38: 0
+          33: 1
+          39: 2
+          34: 3
+          40: 4
+          35: 5
+          37: 6
+          36: 7
+        }
 
       code = e.keyCode
-      # alert code
 
       if (code == 13 || code == 32)
         this.checkBox()
@@ -64,12 +85,12 @@ $(document).ready ->
 
       return if (!(code of keyMap))
 
+
       diff = ROT.DIRS[8][keyMap[code]]
       newX = @x + diff[0]
       newY = @y + diff[1]
 
       newKey = newX + "," + newY
-      # alert(newKey)
       return if (!(newKey of Game.map))
 
       Game.display.draw(@x, @y, Game.map["#{@x},#{@y}"])
