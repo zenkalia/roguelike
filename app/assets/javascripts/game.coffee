@@ -85,6 +85,7 @@ $(document).ready ->
 
       return if (!(code of keyMap))
 
+      alert 'SHIFTY' if window.event.shiftKey
 
       diff = ROT.DIRS[8][keyMap[code]]
       newX = @x + diff[0]
