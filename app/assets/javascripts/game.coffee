@@ -27,11 +27,13 @@ $(document).ready ->
         @y = y
         this.draw()
   class Player
+    action_points: 4
     constructor: (@x, @y) ->
     draw: ->
       Game.display.draw(@x, @y, "@", "#ff0")
     act: ->
       Game.engine.lock()
+      @points_this_turn = @action_points
       window.addEventListener("keydown", this)
       window.addEventListener("keypress", this)
     checkBox: ->
@@ -99,12 +101,13 @@ $(document).ready ->
       @y = newY
       @.draw()
       window.removeEventListener("keydown", this)
-      Game.engine.unlock()
+      @points_this_turn--
+      Game.engine.unlock() if @points_this_turn < 1
 
   Game = {
     display: null
     init: ->
-      this.display = new ROT.Display
+      this.display = new ROT.Display({width: 80, height: 28})
       document.body.appendChild(this.display.getContainer())
       this._generateMap()
       scheduler = new ROT.Scheduler.Simple()
@@ -112,12 +115,23 @@ $(document).ready ->
       scheduler.add(this.pedro, true)
       this.engine = new ROT.Engine(scheduler)
       this.engine.start()
+    drawBox: (start_x, start_y, dx, dy) ->
+      for x in [start_x..(start_x+dx)]
+        for y in [start_y..(start_y+dy)]
+          char = ' '
+          vert = (x == start_x or x == (start_x+dx))
+          horiz = (y == start_y or y == (start_y+dy))
+          char = '-' if horiz
+          char = '|' if vert
+          char = '+' if horiz and vert
+          Game.display.draw(x, y, char, "#ff0")
   }
 
   Game.map = {}
   Game.player = null
   Game.engine = null
   Game.ananas = null
+
 
   Game._generateMap = ->
     digger = new ROT.Map.Digger
@@ -133,6 +147,7 @@ $(document).ready ->
     this.pedro = this._createBeing(Pedro, freeCells)
     this._drawWholeMap()
   Game._drawWholeMap = ->
+    Game.drawBox(76,24,3,3)
     for key, val of this.map
       parts = key.split(",")
       x = parseInt(parts[0], '10')
