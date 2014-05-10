@@ -34,6 +34,7 @@ $(document).ready ->
     act: ->
       Game.engine.lock()
       @points_this_turn = @action_points
+      Game.display.drawText(77, 26, String(@points_this_turn))
       window.addEventListener("keydown", this)
       window.addEventListener("keypress", this)
     checkBox: ->
@@ -102,6 +103,8 @@ $(document).ready ->
       @.draw()
       window.removeEventListener("keydown", this)
       @points_this_turn--
+      Game.display.drawText(77, 26, String(@points_this_turn))
+
       Game.engine.unlock() if @points_this_turn < 1
 
   Game = {
@@ -132,7 +135,6 @@ $(document).ready ->
   Game.engine = null
   Game.ananas = null
 
-
   Game._generateMap = ->
     digger = new ROT.Map.Digger
     freeCells = []
@@ -148,6 +150,7 @@ $(document).ready ->
     this._drawWholeMap()
   Game._drawWholeMap = ->
     Game.drawBox(76,24,3,3)
+    Game.display.drawText(77, 25, 'AC')
     for key, val of this.map
       parts = key.split(",")
       x = parseInt(parts[0], '10')
