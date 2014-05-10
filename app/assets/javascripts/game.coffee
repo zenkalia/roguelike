@@ -1,36 +1,45 @@
 $(document).ready ->
-  class Pedro
-    constructor: (@x, @y) ->
+  class Cell
+    constructor: (@x, @y, @body, @color) ->
+    to_s: ->
+      "#{@x},#{@y}"
+    move_to: (cell) ->
+      @x = cell.x
+      @y = cell.y
     draw: ->
-      Game.display.draw(@x, @y, 'P', 'red')
+      Game.display.draw(@x, @y, @body, @color)
+  class Pedro extends Cell
+    constructor: (cell) ->
+      @body = 'P'
+      @color = 'red'
+      @.move_to(cell)
     act: ->
-      x = Game.player.x
-      y = Game.player.y
+      target_cell = Game.player
       passableCallback = (x, y) ->
-        "#{x},#{y}" of Game.map
-      astar = new ROT.Path.AStar(x, y, passableCallback, {topology:4})
+        "#{x},#{y}" of Game.map # check it's a walkable cell
+      astar = new ROT.Path.AStar(target_cell.x, target_cell.y, passableCallback, {topology:4})
 
       path = []
       pathCallback = (x, y) ->
-        path.push([x, y])
+        path.push(Game.map["#{x},#{y}"])
       astar.compute(@x, @y, pathCallback)
+      # this isn't checking for enemies.  only walls.
 
       path.shift() # remove Pedro's position
       if (path.length == 1)
         Game.engine.lock()
         alert("Game over - you were captured by Pedro!")
       else
-        x = path[0][0]
-        y = path[0][1]
-        Game.display.draw(@x, @y, Game.map[@x+","+@y])
-        @x = x
-        @y = y
-        this.draw()
-  class Player
+        new_cell = path[0]
+        Game.map[@.to_s()].draw()
+        @.move_to(new_cell)
+        @.draw()
+  class Player extends Cell
     action_points: 4
-    constructor: (@x, @y) ->
-    draw: ->
-      Game.display.draw(@x, @y, "@", "#ff0")
+    constructor: (cell) ->
+      @body = '@'
+      @color = '#ff0'
+      @.move_to(cell)
     act: ->
       Game.engine.lock()
       @points_this_turn = @action_points
@@ -38,10 +47,10 @@ $(document).ready ->
       window.addEventListener("keydown", this)
       window.addEventListener("keypress", this)
     checkBox: ->
-      key = @x + "," + @y
-      if (Game.map[key] != "*")
+      key = @cell.to_s()
+      if (Game.map[key].value != "*")
         alert("There is no box here!")
-      else if (key == Game.ananas)
+      else if (key == Game.ananas) # this will just be a coordinate string..
         alert("Hooray! You found an ananas and won this game.")
         Game.engine.lock()
         window.removeEventListener("keydown", this)
@@ -91,15 +100,14 @@ $(document).ready ->
       alert 'SHIFTY' if window.event.shiftKey
 
       diff = ROT.DIRS[8][keyMap[code]]
-      newX = @x + diff[0]
-      newY = @y + diff[1]
+      new_x = this.x + diff[0]
+      new_y = this.y + diff[1]
 
-      newKey = newX + "," + newY
-      return if (!(newKey of Game.map))
+      new_cell = Game.map[new Cell(new_x, new_y).to_s()]
+      return unless new_cell
 
-      Game.display.draw(@x, @y, Game.map["#{@x},#{@y}"])
-      @x = newX
-      @y = newY
+      Game.map[this.to_s()].draw()
+      @.move_to(new_cell)
       @.draw()
       window.removeEventListener("keydown", this)
       @points_this_turn--
@@ -140,9 +148,9 @@ $(document).ready ->
     freeCells = []
     digCallback = (x, y, value) ->
       return if value
-      key = "#{x},#{y}"
-      this.map[key] = '.'
-      freeCells.push(key)
+      new_cell = new Cell(x, y, '.', 'gray')
+      this.map[new_cell.to_s()] = new_cell
+      freeCells.push(new_cell)
     digger.create(digCallback.bind(this))
     this._generateBoxes(freeCells)
     this.player = this._createBeing(Player, freeCells)
@@ -151,24 +159,17 @@ $(document).ready ->
   Game._drawWholeMap = ->
     Game.drawBox(76,24,3,3)
     Game.display.drawText(77, 25, 'AC')
-    for key, val of this.map
-      parts = key.split(",")
-      x = parseInt(parts[0], '10')
-      y = parseInt(parts[1], '10')
-      this.display.draw(x, y, this.map[key])
+    for junk, cell of Game.map
+      cell.draw()
       this.player.draw?()
       this.pedro.draw?()
   Game._generateBoxes = (freeCells) ->
     for i in [0..10]
       index = Math.floor(ROT.RNG.getUniform() * freeCells.length)
-      key = freeCells.splice(index, 1)[0]
-      this.map[key] = '*'
-      if (!i) then this.ananas = key
+      replace_this_cell = freeCells.splice(index, 1)[0]
+      this.map[replace_this_cell.to_s()] = new Cell(replace_this_cell.x, replace_this_cell.y, '*', 'gray')
+      if (!i) then this.ananas = replace_this_cell.to_s()
   Game._createBeing = (what, freeCells) ->
     index = Math.floor(ROT.RNG.getUniform() * freeCells.length)
-    key = freeCells.splice(index, 1)[0]
-    parts = key.split(",")
-    x = parseInt(parts[0], 10)
-    y = parseInt(parts[1], 10)
-    return new what(x, y)
+    return new what(freeCells[index])
   Game.init()
