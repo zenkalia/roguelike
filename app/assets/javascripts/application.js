@@ -15,3 +15,6 @@
 //= require turbolinks
 //= require_tree .
 //= require rot.min.js
+//= require lodash
+
+_.abs = Math.abs
