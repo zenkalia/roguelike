@@ -48,7 +48,7 @@ $(document).ready ->
       window.addEventListener("keypress", this)
     checkBox: =>
       key = this.to_s()
-      if (Game.map[key].value != "*")
+      if (Game.map[key].body isnt "*")
         alert("There is no box here!")
       else if (key == Game.ananas) # this will just be a coordinate string..
         alert("Hooray! You found an ananas and won this game.")
@@ -91,7 +91,7 @@ $(document).ready ->
 
       code = e.keyCode
 
-      if (code == 13 || code == 32)
+      if (e.type is 'keypress' and (code == 13 or code == 32))
         this.checkBox()
         return
 
