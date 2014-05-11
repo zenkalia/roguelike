@@ -50,7 +50,6 @@ $(document).ready ->
         free_cell.body = '*'
         @ananas = free_cell.to_s() unless i
     _createBeing: (what, free_cells) ->
-      index = Math.floor(ROT.RNG.getUniform() * free_cells.length)
-      return new what(free_cells[index])
+      return new what(_.sample(free_cells))
   }
   Game.init()
