@@ -26,16 +26,16 @@ $(document).ready ->
     map: {}
     _generateMap: ->
       digger = new ROT.Map.Digger
-      freeCells = []
+      free_cells = []
       digCallback = (x, y, value) ->
         return if value
         new_cell = new Cell(x, y, '.', 'gray')
         @map[new_cell.to_s()] = new_cell
-        freeCells.push(new_cell)
+        free_cells.push(new_cell)
       digger.create(digCallback.bind(@))
-      @_generateBoxes(freeCells)
-      @player = @_createBeing(Player, freeCells)
-      @pedro = @_createBeing(Pedro, freeCells)
+      @_generateBoxes(free_cells)
+      @player = @_createBeing(Player, free_cells)
+      @pedro = @_createBeing(Pedro, free_cells)
       @_drawWholeMap()
     _drawWholeMap: ->
       window.Game.drawBox(76,24,3,3)
@@ -44,13 +44,13 @@ $(document).ready ->
         cell.draw()
         @player.draw?()
         @pedro.draw?()
-    _generateBoxes: (freeCells) ->
+    _generateBoxes: (free_cells) ->
       for i in [0..10]
-        free_cell = _.sample(freeCells)
+        free_cell = _.sample(free_cells)
         free_cell.body = '*'
         @ananas = free_cell.to_s() unless i
-    _createBeing: (what, freeCells) ->
-      index = Math.floor(ROT.RNG.getUniform() * freeCells.length)
-      return new what(freeCells[index])
+    _createBeing: (what, free_cells) ->
+      index = Math.floor(ROT.RNG.getUniform() * free_cells.length)
+      return new what(free_cells[index])
   }
   Game.init()
