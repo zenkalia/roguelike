@@ -46,10 +46,9 @@ $(document).ready ->
         @pedro.draw?()
     _generateBoxes: (freeCells) ->
       for i in [0..10]
-        index = Math.floor(ROT.RNG.getUniform() * freeCells.length)
-        replace_this_cell = freeCells.splice(index, 1)[0]
-        @map[replace_this_cell.to_s()] = new Cell(replace_this_cell.x, replace_this_cell.y, '*', 'gray')
-        if (!i) then @ananas = replace_this_cell.to_s()
+        free_cell = _.sample(freeCells)
+        free_cell.body = '*'
+        @ananas = free_cell.to_s() unless i
     _createBeing: (what, freeCells) ->
       index = Math.floor(ROT.RNG.getUniform() * freeCells.length)
       return new what(freeCells[index])
