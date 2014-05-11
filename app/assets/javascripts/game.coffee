@@ -46,8 +46,8 @@ $(document).ready ->
       Game.display.drawText(77, 26, String(@points_this_turn))
       window.addEventListener("keydown", this)
       window.addEventListener("keypress", this)
-    checkBox: ->
-      key = @cell.to_s()
+    checkBox: =>
+      key = this.to_s()
       if (Game.map[key].value != "*")
         alert("There is no box here!")
       else if (key == Game.ananas) # this will just be a coordinate string..
@@ -139,9 +139,6 @@ $(document).ready ->
   }
 
   Game.map = {}
-  Game.player = null
-  Game.engine = null
-  Game.ananas = null
 
   Game._generateMap = ->
     digger = new ROT.Map.Digger
