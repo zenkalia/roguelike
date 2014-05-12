@@ -44,6 +44,15 @@ $(document).ready ->
         cell.draw()
         @player.draw?()
         @pedro.draw?()
+      light_passes = (x, y) ->
+        not not window.Game.map[new Cell(x, y).to_s()]
+      fov = new ROT.FOV.PreciseShadowcasting(light_passes)
+      fov_callback = (x, y, r, visibility) ->
+        light = light_passes(x, y)
+        ch = if light then '.' else '#'
+        color = (light_passes(x,y) ? "#aa0" : "#660")
+        window.Game.display.draw(x, y, ch, "#fff", '#000')
+      fov.compute(@player.x, @player.y, 10, fov_callback)
     _generateBoxes: (free_cells) ->
       for i in [0..10]
         free_cell = _.sample(free_cells)
