@@ -2,9 +2,7 @@
 
 class window.Pedro extends Cell
   constructor: (cell) ->
-    @body = 'P'
-    @color = 'red'
-    @.move_to(cell)
+    super(cell.x, cell.y, 'P', 'red')
   act: ->
     target_cell = window.Game.player
     passableCallback = (x, y) ->

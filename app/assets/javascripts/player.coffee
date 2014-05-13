@@ -3,9 +3,7 @@
 class window.Player extends Cell
   action_points: 4
   constructor: (cell) ->
-    @body = '@'
-    @color = '#ff0'
-    @.move_to(cell)
+    super(cell.x, cell.y, '@', '#ff0')
   act: =>
     window.Game.engine.lock()
     @points_this_turn = @action_points
