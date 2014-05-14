@@ -4,10 +4,10 @@ class window.Player extends Cell
   action_points: 4
   constructor: (cell) ->
     super(cell.x, cell.y, '@', '#ff0')
+    @points_this_turn = @action_points
   act: =>
     window.Game.engine.lock()
     @points_this_turn = @action_points
-    @draw_action_points()
     window.addEventListener("keydown", @)
     window.addEventListener("keypress", @)
   checkBox: =>
@@ -23,9 +23,6 @@ class window.Player extends Cell
       alert "This box is empty :-("
   decrement_action_points: (points) ->
     @points_this_turn -= points
-    @draw_action_points()
-  draw_action_points: ->
-    window.Game.display.drawText(77, 26, String(@points_this_turn))
   handleEvent: (e) ->
     if e.type == 'keypress'
       keyMap = {
@@ -65,6 +62,7 @@ class window.Player extends Cell
     if (e.type is 'keypress' and (code == 13 or code == 32))
       @decrement_action_points(1)
       @checkBox()
+      window.Game.draw_whole_map()
       return
 
     return if (!(code of keyMap))
@@ -79,10 +77,10 @@ class window.Player extends Cell
     return unless new_cell
 
     @.move_to(new_cell)
-    window.Game.display.clear()
-    window.Game._drawWholeMap()
-    window.removeEventListener("keydown", @)
     @decrement_action_points(_.abs(diff[0]) + _.abs(diff[1]))
-    window.Game.display.drawText(77, 26, String(@points_this_turn))
+    window.removeEventListener("keydown", @)
 
-    window.Game.engine.unlock() if @points_this_turn < 1
+    if @points_this_turn < 1
+      window.Game.engine.unlock()
+      @points_this_turn = @action_points
+    window.Game.draw_whole_map()

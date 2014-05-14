@@ -36,9 +36,11 @@ $(document).ready ->
       @_generateBoxes(free_cells)
       @player = @_createBeing(Player, free_cells)
       @pedro = @_createBeing(Pedro, free_cells)
-      @_drawWholeMap()
-    _drawWholeMap: ->
+      @draw_whole_map()
+    draw_whole_map: ->
+      window.Game.display.clear()
       window.Game.drawBox(76,24,3,3)
+      window.Game.display.drawText(77, 26, String(@player.points_this_turn))
       window.Game.display.drawText(77, 25, 'AC')
       light_passes = (x, y) ->
         not not window.Game.map[new Cell(x, y).to_s()]
