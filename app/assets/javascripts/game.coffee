@@ -26,31 +26,45 @@ $(document).ready ->
     map: {}
     _generateMap: ->
       digger = new ROT.Map.Digger
-      freeCells = []
+      free_cells = []
       digCallback = (x, y, value) ->
         return if value
         new_cell = new Cell(x, y, '.', 'gray')
         @map[new_cell.to_s()] = new_cell
-        freeCells.push(new_cell)
+        free_cells.push(new_cell)
       digger.create(digCallback.bind(@))
-      @_generateBoxes(freeCells)
-      @player = @_createBeing(Player, freeCells)
-      @pedro = @_createBeing(Pedro, freeCells)
-      @_drawWholeMap()
-    _drawWholeMap: ->
+      @_generateBoxes(free_cells)
+      @player = @_createBeing(Player, free_cells)
+      @pedro = @_createBeing(Pedro, free_cells)
+      @draw_whole_map()
+    draw_whole_map: ->
+      window.Game.display.clear()
       window.Game.drawBox(76,24,3,3)
+      window.Game.display.drawText(77, 26, String(@player.points_this_turn))
       window.Game.display.drawText(77, 25, 'AC')
-      for junk, cell of window.Game.map
-        cell.draw()
-        @player.draw?()
-        @pedro.draw?()
-    _generateBoxes: (freeCells) ->
+      light_passes = (x, y) ->
+        not not window.Game.map[new Cell(x, y).to_s()]
+      fov = new ROT.FOV.PreciseShadowcasting(light_passes)
+      fov_callback = (x, y, r, visibility) ->
+        light = light_passes(x, y)
+        key = "#{x},#{y}"
+        if light
+          if window.Game.pedro.to_s() == key
+            window.Game.pedro.draw()
+          else
+            window.Game.draw(key)
+        else
+          window.Game.display.draw(x, y, '#', 'gray')
+      fov.compute(@player.x, @player.y, 10, fov_callback)
+      window.Game.player.draw()
+    draw: (key) ->
+      window.Game.map[key].draw()
+    _generateBoxes: (free_cells) ->
       for i in [0..10]
-        free_cell = _.sample(freeCells)
+        free_cell = _.sample(free_cells)
         free_cell.body = '*'
         @ananas = free_cell.to_s() unless i
-    _createBeing: (what, freeCells) ->
-      index = Math.floor(ROT.RNG.getUniform() * freeCells.length)
-      return new what(freeCells[index])
+    _createBeing: (what, free_cells) ->
+      return new what(_.sample(free_cells))
   }
   Game.init()

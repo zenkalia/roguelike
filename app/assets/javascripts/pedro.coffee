@@ -2,9 +2,7 @@
 
 class window.Pedro extends Cell
   constructor: (cell) ->
-    @body = 'P'
-    @color = 'red'
-    @.move_to(cell)
+    super(cell.x, cell.y, 'P', 'red')
   act: ->
     target_cell = window.Game.player
     passableCallback = (x, y) ->
@@ -23,6 +21,4 @@ class window.Pedro extends Cell
       alert("Game over - you were captured by Pedro!")
     else
       new_cell = path[0]
-      window.Game.map[@.to_s()].draw()
       @.move_to(new_cell)
-      @.draw()
