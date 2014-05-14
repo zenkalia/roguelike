@@ -40,19 +40,23 @@ $(document).ready ->
     _drawWholeMap: ->
       window.Game.drawBox(76,24,3,3)
       window.Game.display.drawText(77, 25, 'AC')
-      for junk, cell of window.Game.map
-        cell.draw()
-        @player.draw?()
-        @pedro.draw?()
       light_passes = (x, y) ->
         not not window.Game.map[new Cell(x, y).to_s()]
       fov = new ROT.FOV.PreciseShadowcasting(light_passes)
       fov_callback = (x, y, r, visibility) ->
         light = light_passes(x, y)
-        ch = if light then '.' else '#'
-        color = (light_passes(x,y) ? "#aa0" : "#660")
-        window.Game.display.draw(x, y, ch, "#fff", '#000')
+        key = "#{x},#{y}"
+        if light
+          if window.Game.pedro.to_s() == key
+            window.Game.pedro.draw()
+          else
+            window.Game.draw(key)
+        else
+          window.Game.display.draw(x, y, '#', 'gray')
       fov.compute(@player.x, @player.y, 10, fov_callback)
+      window.Game.player.draw()
+    draw: (key) ->
+      window.Game.map[key].draw()
     _generateBoxes: (free_cells) ->
       for i in [0..10]
         free_cell = _.sample(free_cells)

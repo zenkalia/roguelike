@@ -29,14 +29,15 @@ class window.Player extends Cell
   handleEvent: (e) ->
     if e.type == 'keypress'
       keyMap = {
-        75: 0
-        85: 1
-        76: 2
-        78: 3
-        74: 4
-        66: 5
-        72: 6
-        89: 7
+        # uppercase vim keys here
+        #75: 0
+        #85: 1
+        #76: 2
+        #78: 3
+        #74: 4
+        #66: 5
+        #72: 6
+        #89: 7
         107: 0
         117: 1
         108: 2
@@ -77,9 +78,9 @@ class window.Player extends Cell
     new_cell = window.Game.map[new Cell(new_x, new_y).to_s()]
     return unless new_cell
 
-    window.Game.map[@to_s()].draw()
     @.move_to(new_cell)
-    @.draw()
+    window.Game.display.clear()
+    window.Game._drawWholeMap()
     window.removeEventListener("keydown", @)
     @decrement_action_points(_.abs(diff[0]) + _.abs(diff[1]))
     window.Game.display.drawText(77, 26, String(@points_this_turn))

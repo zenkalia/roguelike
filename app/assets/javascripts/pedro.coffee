@@ -21,6 +21,4 @@ class window.Pedro extends Cell
       alert("Game over - you were captured by Pedro!")
     else
       new_cell = path[0]
-      window.Game.map[@.to_s()].draw()
       @.move_to(new_cell)
-      @.draw()
