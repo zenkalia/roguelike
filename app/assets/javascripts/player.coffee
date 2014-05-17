@@ -78,7 +78,6 @@ class window.Player extends LivingThing
 
     @.move_to(new_cell)
     @decrement_action_points(_.abs(diff[0]) + _.abs(diff[1]))
-    window.removeEventListener("keydown", @)
 
     if @points_this_turn < 1
       window.Game.engine.unlock()
