@@ -1,9 +1,9 @@
 #= require cell
 
-class window.Player extends Cell
+class window.Player extends LivingThing
   action_points: 4
   constructor: (cell) ->
-    super(cell.x, cell.y, '@', '#ff0')
+    super(cell.x, cell.y, '@', '#ff0', 50)
     @points_this_turn = @action_points
   act: =>
     window.Game.engine.lock()

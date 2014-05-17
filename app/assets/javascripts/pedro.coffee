@@ -1,8 +1,8 @@
 #= require cell
 
-class window.Pedro extends Cell
+class window.Pedro extends LivingThing
   constructor: (cell) ->
-    super(cell.x, cell.y, 'P', 'red')
+    super(cell.x, cell.y, 'P', 'red', 10)
   act: ->
     target_cell = window.Game.player
     passableCallback = (x, y) ->
@@ -18,7 +18,7 @@ class window.Pedro extends Cell
     path.shift() # remove Pedro's position
     if (path.length == 1)
       window.Game.engine.lock()
-      alert("Game over - you were captured by Pedro!")
+      window.Game.player.hp -= 4
     else
       new_cell = path[0]
       @.move_to(new_cell)
