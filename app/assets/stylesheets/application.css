@@ -33,5 +33,6 @@ body {
   resize: none;
   overflow: auto;
   background-color: black;
-  color: lightgray
+  color: lightgray;
+  vertical-align: -1px;
 }
