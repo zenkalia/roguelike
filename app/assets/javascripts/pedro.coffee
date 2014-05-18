@@ -17,7 +17,7 @@ class window.Pedro extends LivingThing
 
     path.shift() # remove Pedro's position
     if (path.length == 1)
-      window.Game.engine.lock()
+      window.Game.log 'Pedro just hit ya!'
       window.Game.player.hp -= 4
     else
       new_cell = path[0]
