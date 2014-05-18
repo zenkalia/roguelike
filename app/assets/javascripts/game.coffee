@@ -6,7 +6,7 @@ $(document).ready ->
     display: null
     init: ->
       @display = new ROT.Display({width: 80, height: 28})
-      document.body.appendChild(@display.getContainer())
+      $('#game-window').append(@display.getContainer())
       @_generateMap()
       scheduler = new ROT.Scheduler.Simple()
       scheduler.add(@player, true)

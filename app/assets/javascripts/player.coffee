@@ -27,14 +27,14 @@ class window.Player extends LivingThing
     if e.type == 'keypress'
       keyMap = {
         # uppercase vim keys here
-        #75: 0
-        #85: 1
-        #76: 2
-        #78: 3
-        #74: 4
-        #66: 5
-        #72: 6
-        #89: 7
+        75: 0
+        85: 1
+        76: 2
+        78: 3
+        74: 4
+        66: 5
+        72: 6
+        89: 7
         107: 0
         117: 1
         108: 2
@@ -67,8 +67,6 @@ class window.Player extends LivingThing
 
     return if (!(code of keyMap))
 
-    alert 'SHIFTY' if window.event.shiftKey
-
     diff = ROT.DIRS[8][keyMap[code]]
     new_x = @x + diff[0]
     new_y = @y + diff[1]
@@ -76,8 +74,17 @@ class window.Player extends LivingThing
     new_cell = window.Game.map[new Cell(new_x, new_y).to_s()]
     return unless new_cell
 
-    @.move_to(new_cell)
-    @decrement_action_points(_.abs(diff[0]) + _.abs(diff[1]))
+    monster = window.Game.monsters[new_cell.to_s()]
+    if monster?
+      if window.event.shiftKey
+        @heavy_hit monster
+        @decrement_action_points 3
+      else
+        @hit monster
+        @decrement_action_points 1
+    else
+      @.move_to new_cell
+      @decrement_action_points 1
 
     if @points_this_turn < 1
       window.Game.engine.unlock()
