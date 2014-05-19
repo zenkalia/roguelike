@@ -21,3 +21,5 @@ class window.LivingThing extends Cell
     target.hp -= @light_attack_power
   heavy_hit: (target) ->
     target.hp -= 4 * @light_attack_power
+  dead: ->
+    @hp <= 0
