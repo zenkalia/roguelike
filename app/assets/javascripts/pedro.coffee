@@ -5,8 +5,11 @@ class window.Pedro extends LivingThing
     super(cell.x, cell.y, 'P', 'red', 10)
   act: ->
     target_cell = window.Game.player
-    passableCallback = (x, y) ->
-      "#{x},#{y}" of window.Game.map # check it's a walkable cell
+    passableCallback = (x, y) =>
+      key = "#{x},#{y}"
+      isnt_wall = key of window.Game.map # check it's a walkable cell
+      is_monster = key of window.Game.monsters
+      isnt_wall and (key == @to_s() or !is_monster)
     astar = new ROT.Path.AStar(target_cell.x, target_cell.y, passableCallback, {topology:4})
 
     path = []
@@ -14,6 +17,8 @@ class window.Pedro extends LivingThing
       path.push(window.Game.map["#{x},#{y}"])
     astar.compute(@x, @y, pathCallback)
     # this isn't checking for enemies.  only walls.
+
+    return unless path.length # no path
 
     path.shift() # remove Pedro's position
     if (path.length == 1)
