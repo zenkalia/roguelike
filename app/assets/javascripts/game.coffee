@@ -61,7 +61,7 @@ $(document).ready ->
           window.Game.draw(key)
         else
           window.Game.display.draw(x, y, '#', 'gray')
-      fov.compute(@player.x, @player.y, 10, fov_callback)
+      fov.compute(@player.x, @player.y, 120, fov_callback)
       window.Game.player.draw()
     draw: (key) ->
       monster = window.Game.monsters[key]
