@@ -44,8 +44,8 @@ $(document).ready ->
     draw_whole_map: ->
       for key, monster of window.Game.monsters
         if monster.dead()
+          window.Game.engine._scheduler.remove monster
           delete window.Game.monsters[key]
-          window.Game.engine._scheduler.remove @pedro
       window.Game.display.clear()
       window.Game.drawBox(76,24,3,3)
       window.Game.display.drawText(77, 26, String(@player.points_this_turn))
