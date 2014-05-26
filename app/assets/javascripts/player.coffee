@@ -88,5 +88,7 @@ class window.Player extends LivingThing
 
     if @points_this_turn < 1
       window.Game.engine.unlock()
+      window.removeEventListener("keydown", @)
+      window.removeEventListener("keypress", @)
       @points_this_turn = @action_points
     window.Game.draw_whole_map()
