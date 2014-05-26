@@ -40,6 +40,7 @@ $(document).ready ->
       @_generateBoxes(free_cells)
       @player = new Player(_.sample(free_cells))
       @pedro = @_createMonster(Pedro, free_cells)
+      @pedro.move_to(new Cell(@player.x, @player.y+1))
       @draw_whole_map()
     draw_whole_map: ->
       for key, monster of window.Game.monsters

@@ -1,13 +1,15 @@
 #= require cell
 
 class window.Pedro extends LivingThing
+  action_points: 3
   constructor: (cell) ->
     super(cell.x, cell.y, 'P', 'red', 10)
     @light_attack_power = 2
+    @points_this_turn = @action_points
   act: ->
-    window.Game.engine.lock()
-    @points_this_turn = 3
+    @points_this_turn = @action_points
     go_for_blood = =>
+      console.log "points: #{@points_this_turn}"
       target_cell = window.Game.player
       passableCallback = (x, y) =>
         key = "#{x},#{y}"
@@ -21,14 +23,16 @@ class window.Pedro extends LivingThing
         path.push(window.Game.map["#{x},#{y}"])
       astar.compute(@x, @y, pathCallback)
 
-      return unless path.length # no path
+      unless path.length # no path
+        window.Game.engine.unlock()
+        return
 
       path.shift() # remove Pedro's position
-      if (path.length == 1)
+      if (path.length <= 1)
         if @points_this_turn == 3
           @heavy_hit(window.Game.player)
-          window.Game.log 'Pedro just hit ya HARD!'
-          @points_this_turn = 0
+          window.Game.log 'Pedro just hit ya HARD'
+          @points_this_turn -= 3
         else
           @hit(window.Game.player)
           window.Game.log 'Pedro just hit ya'
@@ -41,7 +45,7 @@ class window.Pedro extends LivingThing
       window.Game.draw_whole_map()
 
       if @points_this_turn > 0
-        setTimeout(go_for_blood, 500)
+        setTimeout(go_for_blood, 50)
       else
-        window.Game.engine.unlock()
+        return
     go_for_blood()
