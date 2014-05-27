@@ -8,10 +8,15 @@ class window.Player extends LivingThing
     $(document).on "keydown", 'body', @handleEvent
     $(document).on "keypress", 'body', @handleEvent
     @acting = false
-  act: ->
-    window.Game.engine.lock()
+  act: =>
+    window.Game.log 'act, player!--------------------'
+    window.Game.log "#{window.Game.engine._lock} <- lock num"
+    window.Game.log "#{@acting}"
     @acting = true
     @points_this_turn = @action_points
+    window.Game.engine.lock()
+    window.Game.log "#{window.Game.engine._lock} <- lock num"
+    window.Game.log "#{@acting}"
   checkBox: ->
     key = @to_s()
     if (window.Game.map[key].body isnt "*")
@@ -27,6 +32,7 @@ class window.Player extends LivingThing
     @points_this_turn -= points
   handleEvent: (e) =>
     return unless @acting
+    window.Game.log 'you pressed a key'
     if e.type == 'keypress'
       keyMap = {
         # uppercase vim keys here
@@ -90,7 +96,7 @@ class window.Player extends LivingThing
       @decrement_action_points 1
 
     if @points_this_turn < 1
-      window.Game.engine.unlock()
       @acting = false
       @points_this_turn = @action_points
+      window.Game.engine.unlock()
     window.Game.draw_whole_map()
