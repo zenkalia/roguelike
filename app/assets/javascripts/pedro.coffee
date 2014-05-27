@@ -41,7 +41,7 @@ class window.Pedro extends LivingThing
       window.Game.draw_whole_map()
 
       if @points_this_turn > 0
-        setTimeout(go_for_blood, 500)
+        setTimeout(go_for_blood, 5)
       else
         window.Game.engine.unlock()
     go_for_blood()
