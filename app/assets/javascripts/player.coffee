@@ -5,12 +5,14 @@ class window.Player extends LivingThing
   constructor: (cell) ->
     super(cell.x, cell.y, '@', '#ff0', 50)
     @points_this_turn = @action_points
-  act: =>
+    $(document).on "keydown", 'body', @handleEvent
+    $(document).on "keypress", 'body', @handleEvent
+    @acting = false
+  act: ->
     window.Game.engine.lock()
+    @acting = true
     @points_this_turn = @action_points
-    window.addEventListener("keydown", @)
-    window.addEventListener("keypress", @)
-  checkBox: =>
+  checkBox: ->
     key = @to_s()
     if (window.Game.map[key].body isnt "*")
       alert("There is no box here!")
@@ -23,7 +25,8 @@ class window.Player extends LivingThing
       alert "This box is empty :-("
   decrement_action_points: (points) ->
     @points_this_turn -= points
-  handleEvent: (e) ->
+  handleEvent: (e) =>
+    return unless @acting
     if e.type == 'keypress'
       keyMap = {
         # uppercase vim keys here
@@ -88,7 +91,6 @@ class window.Player extends LivingThing
 
     if @points_this_turn < 1
       window.Game.engine.unlock()
-      window.removeEventListener("keydown", @)
-      window.removeEventListener("keypress", @)
+      @acting = false
       @points_this_turn = @action_points
     window.Game.draw_whole_map()
