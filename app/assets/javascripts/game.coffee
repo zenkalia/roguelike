@@ -42,6 +42,7 @@ $(document).ready ->
       @_generateBoxes()
       @player = new Player(_.sample(@free_cells))
       @_createMonster(Gridbug)
+      @_createMonster(Gridbug)
       @_createMonster(Bat)
       @_createMonster(Bat)
       @_createMonster(Bat)
