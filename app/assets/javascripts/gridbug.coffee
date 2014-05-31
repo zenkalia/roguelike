@@ -7,44 +7,43 @@ class window.Gridbug extends LivingThing
   act: ->
     window.Game.engine.lock()
     @points_this_turn = 4
-    go_for_blood = =>
-      target_cell = window.Game.player
-      passableCallback = (x, y) =>
-        key = "#{x},#{y}"
-        isnt_wall = key of window.Game.map # check it's a walkable cell
-        is_monster = key of window.Game.monsters
-        isnt_wall and (key == @to_s() or !is_monster)
-      astar = new ROT.Path.AStar(target_cell.x, target_cell.y, passableCallback, {topology:4})
+    @go_for_blood()
+  go_for_blood: =>
+    target_cell = window.Game.player
+    passableCallback = (x, y) =>
+      key = "#{x},#{y}"
+      isnt_wall = key of window.Game.map # check it's a walkable cell
+      is_monster = key of window.Game.monsters
+      isnt_wall and (key == @to_s() or !is_monster)
+    astar = new ROT.Path.AStar(target_cell.x, target_cell.y, passableCallback, {topology:4})
 
-      path = []
-      pathCallback = (x, y) ->
-        path.push(window.Game.map["#{x},#{y}"])
-      astar.compute(@x, @y, pathCallback)
+    path = []
+    pathCallback = (x, y) ->
+      path.push(window.Game.map["#{x},#{y}"])
+    astar.compute(@x, @y, pathCallback)
 
-      return unless path.length # no path
+    unless path.length # no path
+      window.Game.engine.unlock()
+      return
 
-      path.shift() # remove Pedro's position
-      if @distance(window.Game.player) < 2
-        if @points_this_turn >= 3
-          @heavy_hit(window.Game.player)
-          window.Game.log 'The gridbug shocked you!'
-          @points_this_turn -= 3
-        else
-          @hit(window.Game.player)
-          window.Game.log 'The gridbug hit you.'
-          @points_this_turn -= 1
+    path.shift() # remove Pedro's position
+    if @distance(window.Game.player) < 2
+      if @points_this_turn >= 3
+        @heavy_hit(window.Game.player)
+        window.Game.log 'The gridbug shocked you!'
+        @points_this_turn -= 3
       else
-        new_cell = path[0]
-        @.move_to(new_cell)
+        @hit(window.Game.player)
+        window.Game.log 'The gridbug hit you.'
         @points_this_turn -= 1
+    else
+      new_cell = path[0]
+      @.move_to(new_cell)
+      @points_this_turn -= 1
 
-      window.Game.draw_whole_map()
+    window.Game.draw_whole_map()
 
-      if @points_this_turn > 0
-        if @to_s() of window.Game.visible_cells
-          setTimeout(go_for_blood, 300)
-        else
-          go_for_blood()
-      else
-        window.Game.engine.unlock()
-    go_for_blood()
+    if @points_this_turn > 0
+      @end_of_blood()
+    else
+      window.Game.engine.unlock()
