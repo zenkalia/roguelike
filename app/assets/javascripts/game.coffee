@@ -29,6 +29,7 @@ $(document).ready ->
     map: {}
     monsters: {}
     free_cells: []
+    visible_cells: {}
     _generateMap: ->
       digger = new ROT.Map.Digger(80, 24, dugPercentage: .7)
       @free_cells = []
@@ -59,12 +60,14 @@ $(document).ready ->
       window.Game.display.drawText(50, 25, "HP: #{@player.hp}/#{@player.max_hp}")
       light_passes = (x, y) ->
         not not window.Game.map[new Cell(x, y).to_s()]
+      @visible_cells = {}
       fov = new ROT.FOV.PreciseShadowcasting(light_passes)
-      fov_callback = (x, y, r, visibility) ->
+      fov_callback = (x, y, r, visibility) =>
         light = light_passes(x, y)
-        key = "#{x},#{y}"
         if light
+          key = "#{x},#{y}"
           window.Game.draw(key)
+          @visible_cells[key] = window.Game.map[key]
         else
           window.Game.display.draw(x, y, '#', 'gray')
       fov.compute(@player.x, @player.y, 120, fov_callback)

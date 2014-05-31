@@ -41,7 +41,10 @@ class window.Gridbug extends LivingThing
       window.Game.draw_whole_map()
 
       if @points_this_turn > 0
-        setTimeout(go_for_blood, 50)
+        if @to_s() of window.Game.visible_cells
+          setTimeout(go_for_blood, 300)
+        else
+          go_for_blood()
       else
         window.Game.engine.unlock()
     go_for_blood()
