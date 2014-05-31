@@ -1,4 +1,5 @@
 #= require gridbug
+#= require bat
 #= require player
 
 $(document).ready ->
@@ -7,11 +8,10 @@ $(document).ready ->
     init: ->
       @display = new ROT.Display({width: 80, height: 28})
       $('#game-window').append(@display.getContainer())
+      @scheduler = new ROT.Scheduler.Simple()
       @_generateMap()
-      scheduler = new ROT.Scheduler.Simple()
-      scheduler.add(@player, true)
-      scheduler.add(@pedro, true)
-      @engine = new ROT.Engine(scheduler)
+      @scheduler.add(@player, true)
+      @engine = new ROT.Engine(@scheduler)
       @engine.start()
     drawBox: (start_x, start_y, dx, dy) ->
       for x in [start_x..(start_x+dx)]
@@ -40,12 +40,15 @@ $(document).ready ->
       digger.create digCallback
       @_generateBoxes()
       @player = new Player(_.sample(@free_cells))
-      @pedro = @_createMonster(Gridbug)
+      @_createMonster(Gridbug)
+      @_createMonster(Bat)
+      @_createMonster(Bat)
+      @_createMonster(Bat)
       @draw_whole_map()
     tick: ->
       for key, monster of window.Game.monsters
         if monster.dead()
-          window.Game.engine._scheduler.remove monster
+          @scheduler.remove monster
           delete window.Game.monsters[key]
     draw_whole_map: ->
       @tick()
@@ -78,5 +81,6 @@ $(document).ready ->
     _createMonster: (what) ->
       new_thing = new what(_.sample(@free_cells))
       @monsters[new_thing.to_s()] = new_thing
+      @scheduler.add(new_thing, true)
   }
   Game.init()
