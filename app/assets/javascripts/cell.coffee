@@ -7,6 +7,12 @@ class window.Cell
     @y = cell.y
   draw: ->
     window.Game.display.draw(@x, @y, @body, @color)
+  distance: (cell) ->
+    dx = _.abs(@x - cell.x)
+    dy = _.abs(@y - cell.y)
+    lateral = _.abs(dx - dy)
+    diagonal = _.max([dx, dy]) - lateral
+    lateral + diagonal * 1.4
 
 class window.LivingThing extends Cell
   constructor: (@x, @y, @body, @color, @hp) ->

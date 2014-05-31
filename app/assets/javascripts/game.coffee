@@ -39,14 +39,16 @@ $(document).ready ->
       digger.create digCallback
       @_generateBoxes(free_cells)
       @player = new Player(_.sample(free_cells))
-      @pedro = @_createMonster(Pedro, free_cells)
+      @pedro = @_createMonster(Gridbug, free_cells)
       @pedro.move_to(new Cell(@player.x, @player.y + 1))
       @draw_whole_map()
-    draw_whole_map: ->
+    tick: ->
       for key, monster of window.Game.monsters
         if monster.dead()
           window.Game.engine._scheduler.remove monster
           delete window.Game.monsters[key]
+    draw_whole_map: ->
+      @tick()
       window.Game.display.clear()
       window.Game.drawBox(76,24,3,3)
       window.Game.display.drawText(77, 26, String(@player.points_this_turn))

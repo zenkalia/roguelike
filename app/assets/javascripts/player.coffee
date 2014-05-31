@@ -8,6 +8,7 @@ class window.Player extends LivingThing
     $(document).on "keydown", 'body', @handleEvent
     $(document).on "keypress", 'body', @handleEvent
     @acting = false
+    @light_attack_power = 2
   act: =>
     @acting = true
     @points_this_turn = @action_points
@@ -92,5 +93,6 @@ class window.Player extends LivingThing
     if @points_this_turn < 1
       @acting = false
       @points_this_turn = @action_points
+      window.Game.tick()
       window.Game.engine.unlock()
     window.Game.draw_whole_map()

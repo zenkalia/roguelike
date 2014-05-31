@@ -1,12 +1,12 @@
 #= require cell
 
-class window.Pedro extends LivingThing
+class window.Gridbug extends LivingThing
   constructor: (cell) ->
-    super(cell.x, cell.y, 'P', 'red', 10)
+    super(cell.x, cell.y, 'x', 'white', 10)
     @light_attack_power = 2
   act: ->
     window.Game.engine.lock()
-    @points_this_turn = 3
+    @points_this_turn = 4
     go_for_blood = =>
       target_cell = window.Game.player
       passableCallback = (x, y) =>
@@ -24,14 +24,14 @@ class window.Pedro extends LivingThing
       return unless path.length # no path
 
       path.shift() # remove Pedro's position
-      if (path.length == 1)
-        if @points_this_turn == 3
+      if @distance(window.Game.player) < 2
+        if @points_this_turn >= 3
           @heavy_hit(window.Game.player)
-          window.Game.log 'Pedro just hit ya HARD!'
-          @points_this_turn = 0
+          window.Game.log 'The gridbug shocked you!'
+          @points_this_turn -= 3
         else
           @hit(window.Game.player)
-          window.Game.log 'Pedro just hit ya'
+          window.Game.log 'The gridbug hit you.'
           @points_this_turn -= 1
       else
         new_cell = path[0]
