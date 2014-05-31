@@ -12,6 +12,7 @@ class window.Player extends LivingThing
   act: =>
     @acting = true
     @points_this_turn = @action_points
+    window.Game.draw_whole_map()
     window.Game.engine.lock()
   checkBox: ->
     key = @to_s()
@@ -92,7 +93,6 @@ class window.Player extends LivingThing
 
     if @points_this_turn < 1
       @acting = false
-      @points_this_turn = @action_points
       window.Game.tick()
       window.Game.engine.unlock()
     window.Game.draw_whole_map()
