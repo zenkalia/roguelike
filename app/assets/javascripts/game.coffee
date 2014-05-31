@@ -28,19 +28,19 @@ $(document).ready ->
       $('#console-log').scrollTop($('#console-log')[0].scrollHeight)
     map: {}
     monsters: {}
+    free_cells: []
     _generateMap: ->
       digger = new ROT.Map.Digger(80, 24, dugPercentage: .7)
-      free_cells = []
+      @free_cells = []
       digCallback = (x, y, value) =>
         return if value
         new_cell = new Cell(x, y, '.', 'gray')
         @map[new_cell.to_s()] = new_cell
-        free_cells.push(new_cell)
+        @free_cells.push(new_cell)
       digger.create digCallback
-      @_generateBoxes(free_cells)
-      @player = new Player(_.sample(free_cells))
-      @pedro = @_createMonster(Gridbug, free_cells)
-      @pedro.move_to(new Cell(@player.x, @player.y + 1))
+      @_generateBoxes()
+      @player = new Player(_.sample(@free_cells))
+      @pedro = @_createMonster(Gridbug)
       @draw_whole_map()
     tick: ->
       for key, monster of window.Game.monsters
@@ -70,13 +70,13 @@ $(document).ready ->
       monster = window.Game.monsters[key]
       return monster.draw() if monster?
       window.Game.map[key].draw()
-    _generateBoxes: (free_cells) ->
+    _generateBoxes: ->
       for i in [0..10]
-        free_cell = _.sample(free_cells)
+        free_cell = _.sample(@free_cells)
         free_cell.body = '*'
         @ananas = free_cell.to_s() unless i
-    _createMonster: (what, free_cells) ->
-      new_thing = new what(_.sample(free_cells))
+    _createMonster: (what) ->
+      new_thing = new what(_.sample(@free_cells))
       @monsters[new_thing.to_s()] = new_thing
   }
   Game.init()
