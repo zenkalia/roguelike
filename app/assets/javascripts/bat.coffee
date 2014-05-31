@@ -2,7 +2,7 @@
 
 class window.Bat extends LivingThing
   constructor: (cell) ->
-    super(cell.x, cell.y, 'B', 'lightgray', 10)
+    super(cell.x, cell.y, 'B', 'lightgray', 8)
     @light_attack_power = 3
   move_randomly: ->
     is_adjacent = (cell) =>
