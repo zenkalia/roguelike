@@ -5,6 +5,7 @@ gem 'jbuilder', '~> 2.0'
 gem 'jquery-rails'
 gem 'lodash-rails'
 gem 'rails', '4.1.0'
+gem 'rails_12factor', group: :production
 gem 'sass-rails', '~> 4.0.3'
 gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'slim'
