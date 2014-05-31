@@ -31,12 +31,12 @@ $(document).ready ->
     _generateMap: ->
       digger = new ROT.Map.Digger
       free_cells = []
-      digCallback = (x, y, value) ->
+      digCallback = (x, y, value) =>
         return if value
         new_cell = new Cell(x, y, '.', 'gray')
         @map[new_cell.to_s()] = new_cell
         free_cells.push(new_cell)
-      digger.create(digCallback.bind(@))
+      digger.create digCallback
       @_generateBoxes(free_cells)
       @player = new Player(_.sample(free_cells))
       @pedro = @_createMonster(Pedro, free_cells)
