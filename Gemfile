@@ -9,6 +9,5 @@ gem 'sass-rails', '~> 4.0.3'
 gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'slim'
 gem 'spring',        group: :development
-gem 'sqlite3'
-gem 'turbolinks'
+gem 'pg'
 gem 'uglifier', '>= 1.3.0'
