@@ -29,7 +29,7 @@ $(document).ready ->
     map: {}
     monsters: {}
     _generateMap: ->
-      digger = new ROT.Map.Digger
+      digger = new ROT.Map.Digger(80, 24, dugPercentage: .7)
       free_cells = []
       digCallback = (x, y, value) =>
         return if value
