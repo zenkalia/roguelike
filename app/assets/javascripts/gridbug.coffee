@@ -1,4 +1,4 @@
-#= require cell
+#= require living_thing
 
 class window.Gridbug extends LivingThing
   constructor: (cell) ->

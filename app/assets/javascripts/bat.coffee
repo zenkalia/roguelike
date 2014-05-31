@@ -1,4 +1,4 @@
-#= require cell
+#= require living_thing
 
 class window.Bat extends LivingThing
   constructor: (cell) ->
