@@ -1,4 +1,4 @@
-#= require pedro
+#= require gridbug
 #= require player
 
 $(document).ready ->
