@@ -24,7 +24,9 @@ $(document).ready ->
           char = '+' if horiz and vert
           window.Game.display.draw(x, y, char, "#ff0")
     log: (msg) ->
-      $('#console-log').append("\n> #{msg}")
+      _.each "#{msg}".split "\n", (m, index) =>
+        c = if index == 0 then '>' else ' '
+        $('#console-log').append("\n#{c} #{m}")
       $('#console-log').scrollTop($('#console-log')[0].scrollHeight)
     map: {}
     monsters: {}

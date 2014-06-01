@@ -64,6 +64,15 @@ class window.Player extends LivingThing
 
     code = e.keyCode
 
+    if code == 63
+      window.Game.log ["Welcome to Mike's roguelike!",
+                      "Movement:",
+                      " y k u  7 8 9",
+                      "  \\|/    \\|/",
+                      " h-.-l  4-5-6",
+                      "  /|\\    /|\\",
+                      " b j n  1 2 3"].join "\n"
+
     if (e.type is 'keypress' and (code == 13 or code == 32))
       @decrement_action_points(1)
       @checkBox()
