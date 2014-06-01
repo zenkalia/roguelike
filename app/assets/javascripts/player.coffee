@@ -78,35 +78,33 @@ class window.Player extends LivingThing
                       "/ - Identify a character"].join "\n"
 
     if (e.type is 'keypress' and (code == 13 or code == 32))
-      @decrement_action_points(1)
+      @decrement_action_points 1
       @checkBox()
       window.Game.draw_whole_map()
-      return
 
-    return if (!(code of keyMap))
+    if code of keyMap
+      diff = ROT.DIRS[8][keyMap[code]]
+      new_x = @x + diff[0]
+      new_y = @y + diff[1]
 
-    diff = ROT.DIRS[8][keyMap[code]]
-    new_x = @x + diff[0]
-    new_y = @y + diff[1]
+      new_cell = window.Game.map[new Cell(new_x, new_y).to_s()]
+      return unless new_cell
 
-    new_cell = window.Game.map[new Cell(new_x, new_y).to_s()]
-    return unless new_cell
-
-    monster = window.Game.monsters[new_cell.to_s()]
-    if monster?
-      if window.event.shiftKey
-        if @points_this_turn >= 3
-          @heavy_hit monster
-          @decrement_action_points 3
+      monster = window.Game.monsters[new_cell.to_s()]
+      if monster?
+        if window.event.shiftKey
+          if @points_this_turn >= 3
+            @heavy_hit monster
+            @decrement_action_points 3
+          else
+            window.Game.log "Not enough action points."
         else
-          window.Game.log "Not enough action points."
+          @hit monster
+          window.Game.log "You hit the #{monster.name}."
+          @decrement_action_points 1
       else
-        @hit monster
-        window.Game.log "You hit the #{monster.name}."
+        @.move_to new_cell
         @decrement_action_points 1
-    else
-      @.move_to new_cell
-      @decrement_action_points 1
 
     if @points_this_turn < 1
       @acting = false

@@ -28,7 +28,7 @@ class window.Gridbug extends LivingThing
       return
 
     path.shift() # remove Pedro's position
-    if @distance(window.Game.player) < 2
+    if @distance(window.Game.player) < 1.1
       if @points_this_turn >= 3
         @heavy_hit(window.Game.player)
         window.Game.log 'The gridbug shocked you!'
