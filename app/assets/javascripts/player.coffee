@@ -66,12 +66,16 @@ class window.Player extends LivingThing
 
     if code == 63
       window.Game.log ["Welcome to Mike's roguelike!",
-                      "Movement:",
+                      "Movement/Combat:",
                       " y k u  7 8 9",
                       "  \\|/    \\|/",
                       " h-.-l  4-5-6",
                       "  /|\\    /|\\",
-                      " b j n  1 2 3"].join "\n"
+                      " b j n  1 2 3",
+                      "You can use either vimkeys or the numpad to control your character.  The shift modifier allows you to do a smash attack.",
+                      "Other:",
+                      "? - This help",
+                      "/ - Identify a character"].join "\n"
 
     if (e.type is 'keypress' and (code == 13 or code == 32))
       @decrement_action_points(1)
@@ -91,10 +95,14 @@ class window.Player extends LivingThing
     monster = window.Game.monsters[new_cell.to_s()]
     if monster?
       if window.event.shiftKey
-        @heavy_hit monster
-        @decrement_action_points 3
+        if @points_this_turn >= 3
+          @heavy_hit monster
+          @decrement_action_points 3
+        else
+          window.Game.log "Not enough action points."
       else
         @hit monster
+        window.Game.log "You hit the #{monster.name}."
         @decrement_action_points 1
     else
       @.move_to new_cell

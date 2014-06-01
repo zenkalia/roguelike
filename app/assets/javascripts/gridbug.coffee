@@ -4,6 +4,7 @@ class window.Gridbug extends LivingThing
   constructor: (cell) ->
     super(cell.x, cell.y, 'x', 'white', 10)
     @light_attack_power = 2
+    @name = 'gridbug'
   act: ->
     window.Game.engine.lock()
     @points_this_turn = 4
