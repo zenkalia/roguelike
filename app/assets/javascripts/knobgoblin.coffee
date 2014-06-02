@@ -1,21 +1,14 @@
 #= require living_thing
 
-class window.Bat extends LivingThing
+class window.Knobgoblin extends LivingThing
   constructor: (cell) ->
-    super(cell.x, cell.y, 'B', 'lightgray', 6)
-    @name = 'bat'
-    @light_attack_power = 2
-  move_randomly: ->
-    is_adjacent = (cell) =>
-      d = @distance(cell)
-      is_player = window.Game.player.to_s() == cell.to_s()
-      is_monster = cell.to_s() of window.Game.monsters
-      d < 1.5 and d > 0 and not is_player and not is_monster
-    adjacent_cells = window.Game.free_cells.filter is_adjacent
-    @.move_to(_.sample(adjacent_cells)) if adjacent_cells.length > 1
+    super(cell.x, cell.y, 'K', 'pink', 20)
+    @light_attack_power = 1
+    @heavy_attack_power = 15
+    @name = 'knobgoblin'
   act: ->
     window.Game.engine.lock()
-    @points_this_turn = 5
+    @points_this_turn = 2
     @go_for_blood()
   go_for_blood: =>
     target_cell = window.Game.player
@@ -36,12 +29,14 @@ class window.Bat extends LivingThing
       return
 
     path.shift() # remove Pedro's position
-    if @points_this_turn > 2
-      @move_randomly()
-      @points_this_turn -= 1
-    else if @distance(window.Game.player) < 2
+    if @distance(window.Game.player) < 2
+      if @points_this_turn >= 2
+        @heavy_hit(window.Game.player)
+        window.Game.log "The #{@name} smashed you!"
+        @points_this_turn -= 2
+      else
         @hit(window.Game.player)
-        window.Game.log 'The bat bit you.'
+        window.Game.log "The #{@name} hit you."
         @points_this_turn -= 1
     else
       new_cell = path[0]
@@ -54,4 +49,3 @@ class window.Bat extends LivingThing
       @end_of_blood()
     else
       window.Game.engine.unlock()
-

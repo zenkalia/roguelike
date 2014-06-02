@@ -48,6 +48,9 @@ $(document).ready ->
       @_createMonster(Bat)
       @_createMonster(Bat)
       @_createMonster(Bat)
+      @_createMonster(Bat)
+      @_createMonster(Knobgoblin)
+      @_createMonster(Knobgoblin)
       @draw_whole_map()
     tick: ->
       for key, monster of window.Game.monsters

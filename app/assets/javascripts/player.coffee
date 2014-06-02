@@ -3,12 +3,13 @@
 class window.Player extends LivingThing
   action_points: 4
   constructor: (cell) ->
-    super(cell.x, cell.y, '@', '#ff0', 50)
+    super(cell.x, cell.y, '@', '#ff0', 30)
     @points_this_turn = @action_points
     $(document).on "keydown", 'body', @handleEvent
     $(document).on "keypress", 'body', @handleEvent
     @acting = false
     @light_attack_power = 2
+    @heavy_attack_power = 8
   act: =>
     @acting = true
     @points_this_turn = @action_points
