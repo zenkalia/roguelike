@@ -83,6 +83,23 @@ class window.Player extends LivingThing
       @checkBox()
       window.Game.draw_whole_map()
 
+    if e.type is 'keypress' and code == 47
+      @acting = false
+      window.Game.log 'What character would you like identified?'
+      lookup_callback = (e) =>
+        stuff =
+          K: 'Knobgoblin - a degrogatory term for hobgoblin.'
+          x: 'Gridbug - these electronically based creatures are not native to this universe.'
+          B: 'Bat - the things vampires come from'
+        msg = stuff[String.fromCharCode(e.which)]
+        if msg
+          window.Game.log msg
+        else
+          window.Game.log 'Never heard of that...'
+        @acting = true
+        $(document).off "keypress", 'body', lookup_callback
+      $(document).on "keypress", 'body', lookup_callback
+
     if code of keyMap
       diff = ROT.DIRS[8][keyMap[code]]
       new_x = @x + diff[0]
