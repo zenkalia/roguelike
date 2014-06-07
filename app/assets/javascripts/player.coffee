@@ -5,13 +5,11 @@ class window.Player extends LivingThing
   constructor: (cell) ->
     super(cell.x, cell.y, '@', '#ff0', 30)
     @points_this_turn = @action_points
-    $(document).on "keydown", 'body', @handleEvent
-    $(document).on "keypress", 'body', @handleEvent
     @acting = false
     @light_attack_power = 2
     @heavy_attack_power = 8
   act: =>
-    @acting = true
+    @bind_keys()
     @points_this_turn = @action_points
     window.Game.draw_whole_map()
     window.Game.engine.lock()
@@ -28,6 +26,82 @@ class window.Player extends LivingThing
       alert "This box is empty :-("
   decrement_action_points: (points) ->
     @points_this_turn -= points
+  bind_keys: =>
+    Mousetrap.bind '?', =>
+      window.Game.log ["Welcome to Mike's roguelike!",
+                      "Movement/Combat:",
+                      "  y k u  7 8 9",
+                      "   \\|/    \\|/",
+                      "  h-.-l  4-5-6",
+                      "   /|\\    /|\\",
+                      "  b j n  1 2 3",
+                      "You can use either vimkeys or the numpad to control your character.  The shift modifier allows you to do a smash attack.",
+                      "Other:",
+                      "? - This help",
+                      "/ - Identify a character"].join "\n"
+    Mousetrap.bind 'h', =>
+      @move(-1, 0)
+    Mousetrap.bind 'l', =>
+      @move(1, 0)
+    Mousetrap.bind 'k', =>
+      @move(0, -1)
+    Mousetrap.bind 'j', =>
+      @move(0, 1)
+    Mousetrap.bind 'shift+h', =>
+      @smash(-1, 0)
+    Mousetrap.bind 'shift+l', =>
+      @smash(1, 0)
+    Mousetrap.bind 'shift+k', =>
+      @smash(0, -1)
+    Mousetrap.bind 'shift+j', =>
+      @smash(0, 1)
+    Mousetrap.bind 'left', =>
+      @move(-1, 0)
+    Mousetrap.bind 'right', =>
+      @move(1, 0)
+    Mousetrap.bind 'up', =>
+      @move(0, -1)
+    Mousetrap.bind 'down', =>
+      @move(0, 1)
+
+  end_of_action: =>
+    if @points_this_turn < 1
+      Mousetrap.reset()
+      window.Game.tick()
+      window.Game.engine.unlock()
+    window.Game.draw_whole_map()
+  move: (dx, dy) =>
+    new_x = @x + dx
+    new_y = @y + dy
+
+    new_cell = window.Game.map[new Cell(new_x, new_y).to_s()]
+    return unless new_cell
+
+    monster = window.Game.monsters[new_cell.to_s()]
+    if monster?
+      @hit monster
+      window.Game.log "You hit the #{monster.name}."
+      @decrement_action_points 1
+    else
+      @.move_to new_cell
+      @decrement_action_points 1
+    @end_of_action()
+  smash: (dx, dy) =>
+    new_x = @x + dx
+    new_y = @y + dy
+
+    new_cell = window.Game.map[new Cell(new_x, new_y).to_s()]
+    return unless new_cell
+
+    monster = window.Game.monsters[new_cell.to_s()]
+    if @points_this_turn >= 3
+      @heavy_hit monster
+      @decrement_action_points 3
+    else
+      window.Game.log "Not enough action points."
+    @end_of_action()
+
+
   handleEvent: (e) =>
     return unless @acting
     if e.type == 'keypress'
@@ -64,19 +138,6 @@ class window.Player extends LivingThing
       }
 
     code = e.keyCode
-
-    if code == 63
-      window.Game.log ["Welcome to Mike's roguelike!",
-                      "Movement/Combat:",
-                      "  y k u  7 8 9",
-                      "   \\|/    \\|/",
-                      "  h-.-l  4-5-6",
-                      "   /|\\    /|\\",
-                      "  b j n  1 2 3",
-                      "You can use either vimkeys or the numpad to control your character.  The shift modifier allows you to do a smash attack.",
-                      "Other:",
-                      "? - This help",
-                      "/ - Identify a character"].join "\n"
 
     if (e.type is 'keypress' and (code == 13 or code == 32))
       @decrement_action_points 1

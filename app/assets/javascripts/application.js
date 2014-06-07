@@ -15,5 +15,6 @@
 //= require_tree .
 //= require rot.min.js
 //= require lodash
+//= require mousetrap.min.js
 
 _.abs = Math.abs
