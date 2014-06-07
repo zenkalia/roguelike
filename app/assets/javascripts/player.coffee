@@ -39,30 +39,30 @@ class window.Player extends LivingThing
                       "Other:",
                       "? - This help",
                       "/ - Identify a character"].join "\n"
-    Mousetrap.bind 'h', =>
-      @move(-1, 0)
-    Mousetrap.bind 'l', =>
-      @move(1, 0)
-    Mousetrap.bind 'k', =>
-      @move(0, -1)
-    Mousetrap.bind 'j', =>
-      @move(0, 1)
-    Mousetrap.bind 'shift+h', =>
-      @smash(-1, 0)
-    Mousetrap.bind 'shift+l', =>
-      @smash(1, 0)
-    Mousetrap.bind 'shift+k', =>
-      @smash(0, -1)
-    Mousetrap.bind 'shift+j', =>
-      @smash(0, 1)
-    Mousetrap.bind 'left', =>
-      @move(-1, 0)
-    Mousetrap.bind 'right', =>
-      @move(1, 0)
-    Mousetrap.bind 'up', =>
-      @move(0, -1)
-    Mousetrap.bind 'down', =>
-      @move(0, 1)
+    Mousetrap.bind 'h', => @move(-1, 0)
+    Mousetrap.bind 'l', => @move(1, 0)
+    Mousetrap.bind 'k', => @move(0, -1)
+    Mousetrap.bind 'j', => @move(0, 1)
+    Mousetrap.bind 'y', => @move(-1, -1)
+    Mousetrap.bind 'u', => @move(1, -1)
+    Mousetrap.bind 'b', => @move(-1, 1)
+    Mousetrap.bind 'n', => @move(1, 1)
+    Mousetrap.bind 'shift+h', => @smash(-1, 0)
+    Mousetrap.bind 'shift+l', => @smash(1, 0)
+    Mousetrap.bind 'shift+k', => @smash(0, -1)
+    Mousetrap.bind 'shift+j', => @smash(0, 1)
+    Mousetrap.bind 'shift+y', => @smash(-1, -1)
+    Mousetrap.bind 'shift+u', => @smash(1, -1)
+    Mousetrap.bind 'shift+b', => @smash(-1, 1)
+    Mousetrap.bind 'shift+n', => @smash(1, 1)
+    Mousetrap.bind 'left', => @move(-1, 0)
+    Mousetrap.bind 'right', => @move(1, 0)
+    Mousetrap.bind 'up', => @move(0, -1)
+    Mousetrap.bind 'down', => @move(0, 1)
+    Mousetrap.bind 'home', => @move(-1, -1) # idk lol
+    Mousetrap.bind 'pageup', => @move(1, -1)
+    Mousetrap.bind 'end', => @move(-1, 1)
+    Mousetrap.bind 'pagedown', => @move(1, 1)
 
   end_of_action: =>
     if @points_this_turn < 1
