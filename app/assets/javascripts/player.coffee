@@ -61,12 +61,16 @@ class window.Player extends LivingThing
     Mousetrap.bind 'shift+end',      => @smash(-1, 1)
     Mousetrap.bind 'shift+pagedown', => @smash(1, 1)
     Mousetrap.bind '/', => @lookup()
+    Mousetrap.bind ' ', => @wait()
+    Mousetrap.bind '.', => @wait()
 
   end_of_action: =>
     if @points_this_turn < 1
       Mousetrap.reset()
       window.Game.tick()
       window.Game.engine.unlock()
+    else
+      @bind_keys()
     window.Game.draw_whole_map()
   print_help: =>
     window.Game.log ["Welcome to Mike's roguelike!",
@@ -79,15 +83,20 @@ class window.Player extends LivingThing
                     "You can use either vimkeys or the numpad to control your character.  The shift modifier allows you to do a smash attack.",
                     "Other:",
                     "? - This help",
-                    "/ - Identify a character"].join "\n"
+                    "/ - Identify a character",
+                    ". - End your turn (also spacebar)"].join "\n"
 
+  wait: =>
+    Mousetrap.reset()
+    @points_this_turn = 0
+    @end_of_action()
   move: (dx, dy) =>
     Mousetrap.reset()
     new_x = @x + dx
     new_y = @y + dy
 
     new_cell = window.Game.map[new Cell(new_x, new_y).to_s()]
-    return @bind_keys() unless new_cell
+    return @end_of_action() unless new_cell
 
     monster = window.Game.monsters[new_cell.to_s()]
     if monster?
@@ -98,7 +107,6 @@ class window.Player extends LivingThing
       @.move_to new_cell
       @decrement_action_points 1
     @end_of_action()
-    @bind_keys()
   smash: (dx, dy) =>
     Mousetrap.reset()
     new_x = @x + dx
@@ -118,7 +126,6 @@ class window.Player extends LivingThing
     else
       window.Game.log 'Not enough action points.'
     @end_of_action()
-    @bind_keys()
   lookup: =>
     Mousetrap.reset()
     window.Game.log 'What character would you like identified?'
