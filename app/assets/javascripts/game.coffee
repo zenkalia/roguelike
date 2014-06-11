@@ -62,7 +62,7 @@ $(document).ready ->
       window.Game.display.clear()
       window.Game.drawBox(76,24,3,3)
       window.Game.display.drawText(77, 26, String(@player.points_this_turn))
-      window.Game.display.drawText(77, 25, 'AC')
+      window.Game.display.drawText(77, 25, 'AP')
       window.Game.display.drawText(50, 25, "HP: #{@player.hp}/#{@player.max_hp}")
       light_passes = (x, y) ->
         not not window.Game.map[new Cell(x, y).to_s()]
