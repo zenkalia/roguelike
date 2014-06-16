@@ -65,7 +65,11 @@ class window.Player extends LivingThing
     Mousetrap.bind '.', => @wait()
 
   end_of_action: =>
-    if @points_this_turn < 1
+    if @points_this_turn < @action_points and not window.Game.combat_mode()
+      Mousetrap.reset()
+      window.Game.tick()
+      window.Game.engine.unlock()
+    else if @points_this_turn < 1
       Mousetrap.reset()
       window.Game.tick()
       window.Game.engine.unlock()

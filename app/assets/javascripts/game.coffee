@@ -21,7 +21,7 @@ $(document).ready ->
       left = start_x + 1
       right = end_x - 1
       for x in [left..right]
-        window.Game.display.draw(x, y, '=', if ((x - left) / (right - left) < percent) then color else 'gray')
+        window.Game.display.draw(x, y, '=', if ((x - left) / (right - left) <= percent) and percent > 0 then color else 'gray')
     log: (msg) ->
       _.each "#{msg}".split("\n"), (m, index) =>
         c = if index == 0 then '>' else ' '
@@ -67,6 +67,8 @@ $(document).ready ->
       window.Game.drawBar(12,0,79,'yellow', @player.hp / @player.max_hp)
       window.Game.display.drawText(0, 1, "AP: #{@player.points_this_turn}/#{@player.action_points}")
       window.Game.drawBar(12,1,79,'blue', @player.points_this_turn / @player.action_points)
+      if window.Game.combat_mode()
+        window.Game.display.drawText(40, 2, '%c{red}IN COMBAT')
       light_passes = (x, y) ->
         not not window.Game.map[new Cell(x, y).to_s()]
       @visible_cells = {}
