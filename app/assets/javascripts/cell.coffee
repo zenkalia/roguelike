@@ -6,7 +6,7 @@ class window.Cell
     @x = cell.x
     @y = cell.y
   draw: ->
-    window.Game.display.draw(@x, @y, @body, @color)
+    window.Game.display.draw(@x, @y + window.Game.y_offset, @body, @color)
   distance: (cell) ->
     dx = _.abs(@x - cell.x)
     dy = _.abs(@y - cell.y)

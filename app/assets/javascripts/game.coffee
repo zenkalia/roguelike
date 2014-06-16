@@ -4,6 +4,8 @@
 
 $(document).ready ->
   window.Game = {
+    y_offset:
+      4
     display: null
     init: ->
       @display = new ROT.Display({width: 80, height: 28})
@@ -13,16 +15,13 @@ $(document).ready ->
       @scheduler.add(@player, true)
       @engine = new ROT.Engine(@scheduler)
       @engine.start()
-    drawBox: (start_x, start_y, dx, dy) ->
-      for x in [start_x..(start_x+dx)]
-        for y in [start_y..(start_y+dy)]
-          char = ' '
-          vert = (x == start_x or x == (start_x+dx))
-          horiz = (y == start_y or y == (start_y+dy))
-          char = '-' if horiz
-          char = '|' if vert
-          char = '+' if horiz and vert
-          window.Game.display.draw(x, y, char, "#ff0")
+    drawBar: (start_x, y, end_x, color, percent) ->
+      window.Game.display.draw(start_x, y, '<', 'gray')
+      window.Game.display.draw(end_x, y, '>', 'gray')
+      left = start_x + 1
+      right = end_x - 1
+      for x in [left..right]
+        window.Game.display.draw(x, y, '=', if ((x - left) / (right - left) < percent) then color else 'gray')
     log: (msg) ->
       _.each "#{msg}".split("\n"), (m, index) =>
         c = if index == 0 then '>' else ' '
@@ -52,6 +51,10 @@ $(document).ready ->
       @_createMonster(Knobgoblin)
       @_createMonster(Knobgoblin)
       @draw_whole_map()
+    combat_mode: ->
+      for key, monster of window.Game.monsters
+        return true if monster.aggro
+      false
     tick: ->
       for key, monster of window.Game.monsters
         if monster.dead()
@@ -60,10 +63,10 @@ $(document).ready ->
     draw_whole_map: ->
       @tick()
       window.Game.display.clear()
-      window.Game.drawBox(76,24,3,3)
-      window.Game.display.drawText(77, 26, String(@player.points_this_turn))
-      window.Game.display.drawText(77, 25, 'AP')
-      window.Game.display.drawText(50, 25, "HP: #{@player.hp}/#{@player.max_hp}")
+      window.Game.display.drawText(0, 0, "HP: #{@player.hp}/#{@player.max_hp}")
+      window.Game.drawBar(12,0,79,'yellow', @player.hp / @player.max_hp)
+      window.Game.display.drawText(0, 1, "AP: #{@player.points_this_turn}/#{@player.action_points}")
+      window.Game.drawBar(12,1,79,'blue', @player.points_this_turn / @player.action_points)
       light_passes = (x, y) ->
         not not window.Game.map[new Cell(x, y).to_s()]
       @visible_cells = {}
@@ -75,7 +78,7 @@ $(document).ready ->
           window.Game.draw(key)
           @visible_cells[key] = window.Game.map[key]
         else
-          window.Game.display.draw(x, y, '#', 'gray')
+          window.Game.display.draw(x, y + @y_offset, '#', 'gray')
       fov.compute(@player.x, @player.y, 120, fov_callback)
       window.Game.player.draw()
     draw: (key) ->
