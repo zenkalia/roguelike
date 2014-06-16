@@ -5,6 +5,10 @@ class window.LivingThing extends Cell
     @max_hp = @hp
     @light_attack_power = 1
     @heavy_attack_power = 4
+    @aggro = false
+  draw: =>
+    @aggro = true
+    super()
   move_to: (cell) ->
     monster = window.Game.monsters[@to_s()]
     delete window.Game.monsters[@to_s()] if monster? and monster == @

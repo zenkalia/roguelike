@@ -7,6 +7,7 @@ class window.Knobgoblin extends LivingThing
     @heavy_attack_power = 15
     @name = 'knobgoblin'
   act: ->
+    return unless @aggro
     window.Game.engine.lock()
     @points_this_turn = 2
     @go_for_blood()

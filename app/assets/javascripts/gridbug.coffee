@@ -7,6 +7,7 @@ class window.Gridbug extends LivingThing
     @heavy_attach_power = 8
     @name = 'gridbug'
   act: ->
+    return unless @aggro
     window.Game.engine.lock()
     @points_this_turn = 4
     @go_for_blood()

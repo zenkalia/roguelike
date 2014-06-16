@@ -14,6 +14,7 @@ class window.Bat extends LivingThing
     adjacent_cells = window.Game.free_cells.filter is_adjacent
     @.move_to(_.sample(adjacent_cells)) if adjacent_cells.length > 1
   act: ->
+    return unless @aggro
     window.Game.engine.lock()
     @points_this_turn = 5
     @go_for_blood()
