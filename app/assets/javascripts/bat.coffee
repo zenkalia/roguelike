@@ -1,10 +1,11 @@
-#= require living_thing
+#= require monster
 
-class window.Bat extends LivingThing
+class window.Bat extends Monster
   constructor: (cell) ->
     super(cell.x, cell.y, 'B', 'lightgray', 6)
     @name = 'bat'
     @light_attack_power = 2
+    @action_points = 5
   move_randomly: ->
     is_adjacent = (cell) =>
       d = @distance(cell)
@@ -13,11 +14,6 @@ class window.Bat extends LivingThing
       d < 1.5 and d > 0 and not is_player and not is_monster
     adjacent_cells = window.Game.free_cells.filter is_adjacent
     @.move_to(_.sample(adjacent_cells)) if adjacent_cells.length > 1
-  act: ->
-    return unless @aggro
-    window.Game.engine.lock()
-    @points_this_turn = 5
-    @go_for_blood()
   go_for_blood: =>
     target_cell = window.Game.player
     passableCallback = (x, y) =>

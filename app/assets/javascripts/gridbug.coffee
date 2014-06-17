@@ -1,16 +1,12 @@
-#= require living_thing
+#= require monster
 
-class window.Gridbug extends LivingThing
+class window.Gridbug extends Monster
   constructor: (cell) ->
     super(cell.x, cell.y, 'x', 'white', 11)
     @light_attack_power = 1
     @heavy_attach_power = 8
+    @action_points = 4
     @name = 'gridbug'
-  act: ->
-    return unless @aggro
-    window.Game.engine.lock()
-    @points_this_turn = 4
-    @go_for_blood()
   go_for_blood: =>
     target_cell = window.Game.player
     passableCallback = (x, y) =>

@@ -1,16 +1,12 @@
-#= require living_thing
+#= require monster
 
-class window.Knobgoblin extends LivingThing
+class window.Knobgoblin extends Monster
   constructor: (cell) ->
     super(cell.x, cell.y, 'K', 'pink', 20)
     @light_attack_power = 1
     @heavy_attack_power = 15
+    @action_points = 2
     @name = 'knobgoblin'
-  act: ->
-    return unless @aggro
-    window.Game.engine.lock()
-    @points_this_turn = 2
-    @go_for_blood()
   go_for_blood: =>
     target_cell = window.Game.player
     passableCallback = (x, y) =>
