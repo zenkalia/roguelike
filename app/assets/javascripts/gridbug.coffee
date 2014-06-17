@@ -7,25 +7,8 @@ class window.Gridbug extends Monster
     @heavy_attach_power = 8
     @action_points = 4
     @name = 'gridbug'
+  topology: 4
   go_for_blood: =>
-    target_cell = window.Game.player
-    passableCallback = (x, y) =>
-      key = "#{x},#{y}"
-      isnt_wall = key of window.Game.map # check it's a walkable cell
-      is_monster = key of window.Game.monsters
-      isnt_wall and (key == @to_s() or !is_monster)
-    astar = new ROT.Path.AStar(target_cell.x, target_cell.y, passableCallback, {topology:4})
-
-    path = []
-    pathCallback = (x, y) ->
-      path.push(window.Game.map["#{x},#{y}"])
-    astar.compute(@x, @y, pathCallback)
-
-    unless path.length # no path
-      window.Game.engine.unlock()
-      return
-
-    path.shift() # remove Pedro's position
     if @distance(window.Game.player) < 1.1
       if @points_this_turn >= 3
         @heavy_hit(window.Game.player)
@@ -36,8 +19,7 @@ class window.Gridbug extends Monster
         window.Game.log 'The gridbug hit you.'
         @points_this_turn -= 1
     else
-      new_cell = path[0]
-      @.move_to(new_cell)
+      @.step_toward(window.Game.player)
       @points_this_turn -= 1
 
     window.Game.draw_whole_map()
