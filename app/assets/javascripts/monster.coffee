@@ -25,3 +25,9 @@ class window.Monster extends LivingThing
     path.shift()
     new_cell = path[0]
     @.move_to(new_cell)
+  end_of_blood: =>
+    if @points_this_turn > 0
+      if @to_s() of window.Game.visible_cells
+        setTimeout(@go_for_blood, 100)
+      else
+        @go_for_blood()

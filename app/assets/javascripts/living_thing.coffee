@@ -20,9 +20,3 @@ class window.LivingThing extends Cell
     target.hp -= @heavy_attack_power
   dead: ->
     @hp <= 0
-  end_of_blood: =>
-    if @points_this_turn > 0
-      if @to_s() of window.Game.visible_cells
-        setTimeout(@go_for_blood, 100)
-      else
-        @go_for_blood()
