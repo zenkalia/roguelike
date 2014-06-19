@@ -1,11 +1,17 @@
 #= require living_thing
 
 class window.Monster extends LivingThing
+  ensure_curiosity: ->
+    if not @curious_about or @.to_s() == @curious_about.to_s()
+      @curious_about = _.sample window.Game.free_cells
   act: ->
-    return unless @aggro
-    window.Game.engine.lock()
-    @points_this_turn = @action_points
-    @go_for_blood()
+    @ensure_curiosity()
+    unless @aggro
+      @step_toward(@curious_about)
+    else
+      window.Game.engine.lock()
+      @points_this_turn = @action_points
+      @go_for_blood()
   topology: 8
   step_toward: (target_cell) ->
     passableCallback = (x, y) =>
