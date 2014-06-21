@@ -1,13 +1,12 @@
 #= require living_thing
 
 class window.Monster extends LivingThing
-  ensure_curiosity: ->
-    if not @curious_about or @.to_s() == @curious_about.to_s()
-      @curious_about = _.sample window.Game.free_cells
+  curious_about: ->
+    @__curious_about = null if @__curious_about?.to_s() == @to_s()
+    @__curious_about ||= _.sample window.Game.free_cells
   act: ->
-    @ensure_curiosity()
     unless @aggro
-      @step_toward(@curious_about)
+      @step_toward(@curious_about())
     else
       window.Game.engine.lock()
       @points_this_turn = @action_points
