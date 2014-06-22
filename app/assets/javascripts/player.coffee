@@ -8,6 +8,7 @@ class window.Player extends LivingThing
     @acting = false
     @light_attack_power = 2
     @heavy_attack_power = 8
+  is_player: true
   act: =>
     @bind_keys()
     @points_this_turn = @action_points

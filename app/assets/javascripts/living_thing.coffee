@@ -15,8 +15,12 @@ class window.LivingThing extends Cell
     super(cell)
     window.Game.monsters[@to_s()] = @ if monster? and monster == @
   hit: (target) ->
-    target.hp -= @light_attack_power
+    damage = Math.round ROT.RNG.getNormal(@light_attack_power, @light_attack_power / 5)
+    target.hp -= damage
+    damage
   heavy_hit: (target) ->
-    target.hp -= @heavy_attack_power
+    damage = Math.round ROT.RNG.getNormal(@heavy_attack_power, @heavy_attack_power / 5)
+    target.hp -= damage
+    damage
   dead: ->
     @hp <= 0
