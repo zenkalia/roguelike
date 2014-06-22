@@ -122,6 +122,8 @@ class window.Player extends LivingThing
       @decrement_action_points 1
     else
       @.move_to new_cell
+      item = window.Game.items[@to_s()]
+      window.Game.log "There is a #{item.name} here." if item
       @decrement_action_points 1
     @end_of_action()
   smash: (dx, dy) =>
