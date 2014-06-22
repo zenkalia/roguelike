@@ -13,17 +13,6 @@ class window.Player extends LivingThing
     @points_this_turn = @action_points
     window.Game.draw_whole_map()
     window.Game.engine.lock()
-  checkBox: ->
-    key = @to_s()
-    if (window.Game.map[key].body isnt "*")
-      alert("There is no box here!")
-    else if (key == window.Game.ananas) # this will just be a coordinate string..
-      alert("Hooray! You found an ananas and won this game.")
-      window.Game.engine.lock()
-      window.removeEventListener("keydown", @)
-      window.removeEventListener("keypress", @)
-    else
-      alert "This box is empty :-("
   decrement_action_points: (points) ->
     @points_this_turn -= points
   bind_keys: =>
