@@ -61,8 +61,9 @@ class window.Player extends LivingThing
     Mousetrap.bind 'shift+end',      => @smash(-1, 1)
     Mousetrap.bind 'shift+pagedown', => @smash(1, 1)
     Mousetrap.bind '/', => @lookup()
-    Mousetrap.bind ' ', => @wait()
+    Mousetrap.bind 'space', => @wait()
     Mousetrap.bind '.', => @wait()
+    Mousetrap.bind ',', => @pickup()
 
   end_of_action: =>
     if @points_this_turn < @action_points and not window.Game.combat_mode()
@@ -88,12 +89,24 @@ class window.Player extends LivingThing
                     "Other:",
                     "? - This help",
                     "/ - Identify a character",
-                    ". - End your turn (also spacebar)"].join "\n"
+                    ". - End your turn (also spacebar)",
+                    ", - Pick up"].join "\n"
 
   wait: =>
     Mousetrap.reset()
     @points_this_turn = 0
     @end_of_action()
+  pickup: =>
+    Mousetrap.reset()
+    @decrement_action_points 1
+    item = window.Game.items[@to_s()]
+    if item
+      window.Game.log 'You exploded an item from the ground.'
+      delete window.Game.items[@to_s()]
+    else
+      window.Game.log "There's no item to pick up here."
+    @end_of_action()
+
   move: (dx, dy) =>
     Mousetrap.reset()
     new_x = @x + dx
