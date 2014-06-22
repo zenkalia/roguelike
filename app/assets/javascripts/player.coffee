@@ -8,6 +8,7 @@ class window.Player extends LivingThing
     @acting = false
     @light_attack_power = 2
     @heavy_attack_power = 8
+    @inventory = []
   act: =>
     @bind_keys()
     @points_this_turn = @action_points
@@ -53,6 +54,7 @@ class window.Player extends LivingThing
     Mousetrap.bind 'space', => @wait()
     Mousetrap.bind '.', => @wait()
     Mousetrap.bind ',', => @pickup()
+    Mousetrap.bind 'i', => @show_inventory()
 
   end_of_action: =>
     if @points_this_turn < @action_points and not window.Game.combat_mode()
@@ -80,6 +82,8 @@ class window.Player extends LivingThing
                     "/ - Identify a character",
                     ". - End your turn (also spacebar)",
                     ", - Pick up"].join "\n"
+  show_inventory: =>
+    window.Game.log ["Inventory:"].concat(_.map @inventory, (item) -> item.to_inventory()).join "\n"
 
   wait: =>
     Mousetrap.reset()
@@ -90,8 +94,9 @@ class window.Player extends LivingThing
     @decrement_action_points 1
     item = window.Game.items[@to_s()]
     if item
-      window.Game.log 'You exploded an item from the ground.'
+      window.Game.log "You picked up a #{item.name}."
       delete window.Game.items[@to_s()]
+      @inventory.push item
     else
       window.Game.log "There's no item to pick up here."
     @end_of_action()
