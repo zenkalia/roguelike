@@ -54,6 +54,8 @@ $(document).ready ->
       @_createMonster(Knobgoblin)
       pot = new Potion(_.sample(@free_cells))
       @items[pot.to_s()] = pot
+      pot = new Potion(_.sample(@free_cells))
+      @items[pot.to_s()] = pot
       @draw_whole_map()
     combat_mode: ->
       for key, monster of window.Game.monsters

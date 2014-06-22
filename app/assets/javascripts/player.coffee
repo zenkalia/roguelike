@@ -9,6 +9,10 @@ class window.Player extends LivingThing
     @light_attack_power = 2
     @heavy_attack_power = 8
     @inventory = []
+    @next_inventory_char = 'a'
+  bump_inventory_char: =>
+    return @next_inventory_char = 'a' if @next_inventory_char == 'z'
+    @next_inventory_char = String.fromCharCode(@next_inventory_char.charCodeAt(0) + 1)
   act: =>
     @bind_keys()
     @points_this_turn = @action_points
@@ -96,6 +100,9 @@ class window.Player extends LivingThing
     if item
       window.Game.log "You picked up a #{item.name}."
       delete window.Game.items[@to_s()]
+      unless item.inventory_id
+        item.inventory_id = @next_inventory_char
+        @bump_inventory_char()
       @inventory.push item
     else
       window.Game.log "There's no item to pick up here."
