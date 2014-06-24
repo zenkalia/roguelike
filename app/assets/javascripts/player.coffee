@@ -59,6 +59,7 @@ class window.Player extends LivingThing
     Mousetrap.bind '.', => @wait()
     Mousetrap.bind ',', => @pickup()
     Mousetrap.bind 'i', => @show_inventory()
+    Mousetrap.bind 'd', => @drop()
 
   end_of_action: =>
     if @points_this_turn < @action_points and not window.Game.combat_mode()
@@ -146,6 +147,26 @@ class window.Player extends LivingThing
     else
       window.Game.log 'Not enough action points.'
     @end_of_action()
+  drop: =>
+    Mousetrap.reset()
+    window.Game.log 'What would you like to drop?'
+    lookup_callback = (e) =>
+      c = String.fromCharCode(e.which)
+      selected_item = _.select @inventory, (item) ->
+        item.inventory_id == c
+
+      if _.any selected_item
+        item = _.first selected_item
+
+        delete @inventory[@inventory.indexOf(item)]
+        @inventory = _.compact @inventory
+        item.move_to @
+        window.Game.items[@to_s()] = item
+      else
+      @acting = true
+      $(document).off "keypress", 'body', lookup_callback
+      @bind_keys()
+    $(document).on "keypress", 'body', lookup_callback
   lookup: =>
     Mousetrap.reset()
     window.Game.log 'What character would you like identified?'
