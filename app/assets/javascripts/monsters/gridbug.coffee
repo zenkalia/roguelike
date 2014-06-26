@@ -2,7 +2,7 @@
 
 class window.Gridbug extends Monster
   constructor: (cell) ->
-    super(cell.x, cell.y, 'x', 'white', 11)
+    super(cell.x, cell.y, 'X', 'white', 11)
     @light_attack_power = 1
     @heavy_attach_power = 8
     @action_points = 4
