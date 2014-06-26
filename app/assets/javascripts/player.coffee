@@ -8,22 +8,16 @@ class window.Player extends LivingThing
     @acting = false
     @light_attack_power = 2
     @heavy_attack_power = 8
+    @inventory = []
+    @next_inventory_char = 'a'
+  bump_inventory_char: =>
+    return @next_inventory_char = 'a' if @next_inventory_char == 'z'
+    @next_inventory_char = String.fromCharCode(@next_inventory_char.charCodeAt(0) + 1)
   act: =>
     @bind_keys()
     @points_this_turn = @action_points
     window.Game.draw_whole_map()
     window.Game.engine.lock()
-  checkBox: ->
-    key = @to_s()
-    if (window.Game.map[key].body isnt "*")
-      alert("There is no box here!")
-    else if (key == window.Game.ananas) # this will just be a coordinate string..
-      alert("Hooray! You found an ananas and won this game.")
-      window.Game.engine.lock()
-      window.removeEventListener("keydown", @)
-      window.removeEventListener("keypress", @)
-    else
-      alert "This box is empty :-("
   decrement_action_points: (points) ->
     @points_this_turn -= points
   bind_keys: =>
@@ -61,8 +55,11 @@ class window.Player extends LivingThing
     Mousetrap.bind 'shift+end',      => @smash(-1, 1)
     Mousetrap.bind 'shift+pagedown', => @smash(1, 1)
     Mousetrap.bind '/', => @lookup()
-    Mousetrap.bind ' ', => @wait()
+    Mousetrap.bind 'space', => @wait()
     Mousetrap.bind '.', => @wait()
+    Mousetrap.bind ',', => @pickup()
+    Mousetrap.bind 'i', => @show_inventory()
+    Mousetrap.bind 'd', => @drop()
 
   end_of_action: =>
     if @points_this_turn < @action_points and not window.Game.combat_mode()
@@ -88,12 +85,32 @@ class window.Player extends LivingThing
                     "Other:",
                     "? - This help",
                     "/ - Identify a character",
-                    ". - End your turn (also spacebar)"].join "\n"
+                    ". - End your turn (also spacebar)",
+                    "i - Inventory",
+                    "d - Drop",
+                    ", - Pick up"].join "\n"
+  show_inventory: =>
+    window.Game.log ["Inventory:"].concat(_.map @inventory, (item) -> item.to_inventory()).join "\n"
 
   wait: =>
     Mousetrap.reset()
     @points_this_turn = 0
     @end_of_action()
+  pickup: =>
+    Mousetrap.reset()
+    @decrement_action_points 1
+    item = window.Game.items[@to_s()]
+    if item
+      window.Game.log "You picked up a #{item.name}."
+      delete window.Game.items[@to_s()]
+      unless item.inventory_id
+        item.inventory_id = @next_inventory_char
+        @bump_inventory_char()
+      @inventory.push item
+    else
+      window.Game.log "There's no item to pick up here."
+    @end_of_action()
+
   move: (dx, dy) =>
     Mousetrap.reset()
     new_x = @x + dx
@@ -109,6 +126,8 @@ class window.Player extends LivingThing
       @decrement_action_points 1
     else
       @.move_to new_cell
+      item = window.Game.items[@to_s()]
+      window.Game.log "There is a #{item.name} here." if item
       @decrement_action_points 1
     @end_of_action()
   smash: (dx, dy) =>
@@ -130,6 +149,26 @@ class window.Player extends LivingThing
     else
       window.Game.log 'Not enough action points.'
     @end_of_action()
+  drop: =>
+    Mousetrap.reset()
+    window.Game.log 'What would you like to drop?'
+    lookup_callback = (e) =>
+      c = String.fromCharCode(e.which)
+      selected_item = _.select @inventory, (item) ->
+        item.inventory_id == c
+
+      if _.any selected_item
+        item = _.first selected_item
+
+        delete @inventory[@inventory.indexOf(item)]
+        @inventory = _.compact @inventory
+        item.move_to @
+        window.Game.items[@to_s()] = item
+      else
+      @acting = true
+      $(document).off "keypress", 'body', lookup_callback
+      @bind_keys()
+    $(document).on "keypress", 'body', lookup_callback
   lookup: =>
     Mousetrap.reset()
     window.Game.log 'What character would you like identified?'

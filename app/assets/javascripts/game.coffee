@@ -1,5 +1,6 @@
 #= require gridbug
 #= require bat
+#= require knobgoblin
 #= require player
 
 $(document).ready ->
@@ -29,6 +30,7 @@ $(document).ready ->
       $('#console-log').scrollTop($('#console-log')[0].scrollHeight)
     map: {}
     monsters: {}
+    items: {}
     free_cells: []
     visible_cells: {}
     _generateMap: ->
@@ -50,6 +52,10 @@ $(document).ready ->
       @_createMonster(Bat)
       @_createMonster(Knobgoblin)
       @_createMonster(Knobgoblin)
+      pot = new Potion(_.sample(@free_cells))
+      @items[pot.to_s()] = pot
+      pot = new Potion(_.sample(@free_cells))
+      @items[pot.to_s()] = pot
       @draw_whole_map()
     combat_mode: ->
       for key, monster of window.Game.monsters
@@ -86,6 +92,8 @@ $(document).ready ->
     draw: (key) ->
       monster = window.Game.monsters[key]
       return monster.draw() if monster?
+      item = window.Game.items[key]
+      return item.draw() if item?
       window.Game.map[key].draw()
     _generateBoxes: ->
       for i in [0..10]
