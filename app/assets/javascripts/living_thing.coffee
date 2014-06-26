@@ -14,13 +14,17 @@ class window.LivingThing extends Cell
     delete window.Game.monsters[@to_s()] if monster? and monster == @
     super(cell)
     window.Game.monsters[@to_s()] = @ if monster? and monster == @
+  to_hit: ->
+    @hp / (2 * @max_hp) + .5
   hit: (target) ->
+    return 0 if ROT.RNG.getUniform() > @to_hit()
     damage = _.max [1, Math.round ROT.RNG.getNormal(@light_attack_power, @light_attack_power / 5)]
-    console.log damage
     target.hp -= damage
+    damage
   heavy_hit: (target) ->
+    return 0 if ROT.RNG.getUniform() > @to_hit()
     damage = _.max [1, Math.round ROT.RNG.getNormal(@heavy_attack_power, @heavy_attack_power / 5)]
-    console.log damage
     target.hp -= damage
+    damage
   dead: ->
     @hp <= 0

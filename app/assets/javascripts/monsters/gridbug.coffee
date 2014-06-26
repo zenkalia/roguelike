@@ -11,12 +11,19 @@ class window.Gridbug extends Monster
   go_for_blood: =>
     if @distance(window.Game.player) < 1.1
       if @points_this_turn >= 3
-        @heavy_hit(window.Game.player)
-        window.Game.log 'The gridbug shocked you!'
+        damage = @heavy_hit(window.Game.player)
+        if damage > 0
+          window.Game.log 'The gridbug shocked you!'
+        else
+          window.Game.log 'The gridbug missed you!'
+
         @points_this_turn -= 3
       else
-        @hit(window.Game.player)
-        window.Game.log 'The gridbug hit you.'
+        damage = @hit(window.Game.player)
+        if damage > 0
+          window.Game.log 'The gridbug hit you.'
+        else
+          window.Game.log 'The gridbug missed you.'
         @points_this_turn -= 1
     else
       @.step_toward(window.Game.player)

@@ -121,8 +121,12 @@ class window.Player extends LivingThing
 
     monster = window.Game.monsters[new_cell.to_s()]
     if monster?
-      @hit monster
-      window.Game.log "You hit the #{monster.name}."
+      damage = @hit monster
+      if damage > 0
+        window.Game.log "You hit the #{monster.name}."
+      else
+        window.Game.log "You miss the #{monster.name}."
+
       @decrement_action_points 1
     else
       @.move_to new_cell
@@ -141,9 +145,12 @@ class window.Player extends LivingThing
     monster = window.Game.monsters[new_cell.to_s()]
     if @points_this_turn >= 3
       if monster
-        @heavy_hit monster
+        damage = @heavy_hit monster
         @decrement_action_points 3
-        window.Game.log "You smash the #{monster.name}."
+        if damage > 0
+          window.Game.log "You smash the #{monster.name}."
+        else
+          window.Game.log "You miss the #{monster.name}!"
       else
         window.Game.log 'Who are you trying to attack?'
     else

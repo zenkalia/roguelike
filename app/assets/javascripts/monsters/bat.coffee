@@ -19,8 +19,11 @@ class window.Bat extends Monster
       @move_randomly()
       @points_this_turn -= 1
     else if @distance(window.Game.player) < 2
-        @hit(window.Game.player)
-        window.Game.log 'The bat bit you.'
+        damage = @hit(window.Game.player)
+        if damage > 0
+          window.Game.log 'The bat bit you.'
+        else
+          window.Game.log 'The bat misses.'
         @points_this_turn -= 1
     else
       @.step_toward(window.Game.player)

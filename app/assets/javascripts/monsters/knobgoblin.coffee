@@ -10,12 +10,18 @@ class window.Knobgoblin extends Monster
   go_for_blood: =>
     if @distance(window.Game.player) < 2
       if @points_this_turn >= 2
-        @heavy_hit(window.Game.player)
-        window.Game.log "The #{@name} smashed you!"
+        damage = @heavy_hit(window.Game.player)
+        if damage > 0
+          window.Game.log "The #{@name} smashed you!"
+        else
+          window.Game.log "The #{@name} missed you!"
         @points_this_turn -= 2
       else
-        @hit(window.Game.player)
-        window.Game.log "The #{@name} hit you."
+        damage = @hit(window.Game.player)
+        if damage > 0
+          window.Game.log "The #{@name} hit you."
+        else
+          window.Game.log "The #{@name} missed you."
         @points_this_turn -= 1
     else
       @.step_toward(window.Game.player)
