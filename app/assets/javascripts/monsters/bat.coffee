@@ -4,7 +4,7 @@ class window.Bat extends Monster
   constructor: (cell) ->
     super(cell.x, cell.y, 'B', 'lightgray', 6)
     @name = 'bat'
-    @light_attack_power = 2
+    @light_attack_power = 1.6
     @action_points = 5
   move_randomly: ->
     is_adjacent = (cell) =>
