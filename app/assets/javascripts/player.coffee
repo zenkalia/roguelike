@@ -86,6 +86,7 @@ class window.Player extends LivingThing
                     "? - This help",
                     "/ - Identify a character",
                     ". - End your turn (also spacebar)",
+                    "i - Inventory",
                     "d - Drop",
                     ", - Pick up"].join "\n"
   show_inventory: =>
