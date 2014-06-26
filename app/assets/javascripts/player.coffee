@@ -86,6 +86,7 @@ class window.Player extends LivingThing
                     "? - This help",
                     "/ - Identify a character",
                     ". - End your turn (also spacebar)",
+                    "d - Drop",
                     ", - Pick up"].join "\n"
   show_inventory: =>
     window.Game.log ["Inventory:"].concat(_.map @inventory, (item) -> item.to_inventory()).join "\n"
