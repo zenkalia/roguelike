@@ -65,6 +65,7 @@ class window.Player extends LivingThing
     if @points_this_turn < @action_points and not window.Game.combat_mode()
       Mousetrap.reset()
       window.Game.tick()
+      window.Game.player.rooted = false
       window.Game.engine.unlock()
     else if @points_this_turn < 1
       Mousetrap.reset()
@@ -129,6 +130,14 @@ class window.Player extends LivingThing
 
       @decrement_action_points 1
     else
+      if @rooted
+        if _.random(1) > .6
+          window.Game.log "You break your feet free"
+          @rooted = false
+        else
+          window.Game.log "You can't move with your feet rooted to the ground."
+          @end_of_action()
+          return
       @.move_to new_cell
       item = window.Game.items[@to_s()]
       window.Game.log "There is a #{item.name} here." if item
