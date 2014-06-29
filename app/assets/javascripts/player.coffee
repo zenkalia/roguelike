@@ -190,9 +190,10 @@ class window.Player extends LivingThing
     window.Game.log 'What character would you like identified?'
     lookup_callback = (e) =>
       stuff =
-        K: 'Knobgoblin - a degrogatory term for hobgoblin.'
-        x: 'Gridbug - these electronically based creatures are not native to this universe.'
+        K: 'Knobgoblin - a degrogatory term for hobgoblin'
+        x: 'Gridbug - these electronically based creatures are not native to this universe'
         B: 'Bat - the things vampires come from'
+        R: 'Root Druid - one with nature, watch your footing'
       msg = stuff[String.fromCharCode(e.which)]
       if msg
         window.Game.log msg
