@@ -36,3 +36,5 @@ class window.Monster extends LivingThing
         setTimeout(@go_for_blood, 100)
       else
         @go_for_blood()
+    else
+      window.Game.engine.unlock()

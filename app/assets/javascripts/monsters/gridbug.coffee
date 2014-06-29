@@ -31,7 +31,4 @@ class window.Gridbug extends Monster
 
     window.Game.draw_whole_map()
 
-    if @points_this_turn > 0
-      @end_of_blood()
-    else
-      window.Game.engine.unlock()
+    @end_of_blood()
