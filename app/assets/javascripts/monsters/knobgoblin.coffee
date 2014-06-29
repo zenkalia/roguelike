@@ -2,7 +2,7 @@
 
 class window.Knobgoblin extends Monster
   constructor: (cell) ->
-    super(cell.x, cell.y, 'K', 'pink', 20)
+    super(cell.x, cell.y, 'K', 20)
     @light_attack_power = 1
     @heavy_attack_power = 15
     @action_points = 2

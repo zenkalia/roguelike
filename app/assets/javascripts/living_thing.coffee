@@ -1,11 +1,19 @@
 #= require cell
 
 class window.LivingThing extends Cell
-  constructor: (@x, @y, @body, @color, @hp) ->
+  constructor: (@x, @y, @body, @hp) ->
     @max_hp = @hp
     @light_attack_power = 1
     @heavy_attack_power = 4
     @aggro = false
+  color: ->
+    centz = @hp / @max_hp
+    if centz > .7
+      return 'lightcyan'
+    else if centz > .3
+      return 'lemonchiffon'
+    else
+      return 'indianred'
   draw: =>
     @aggro = true
     super()

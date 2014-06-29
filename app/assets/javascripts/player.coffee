@@ -3,7 +3,7 @@
 class window.Player extends LivingThing
   action_points: 4
   constructor: (cell) ->
-    super(cell.x, cell.y, '@', '#ff0', 30)
+    super(cell.x, cell.y, '@', 30)
     @points_this_turn = @action_points
     @acting = false
     @light_attack_power = 2
