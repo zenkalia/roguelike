@@ -180,7 +180,6 @@ class window.Player extends LivingThing
         @inventory = _.compact @inventory
         item.move_to @
         window.Game.items[@to_s()] = item
-      else
       @acting = true
       $(document).off "keypress", 'body', lookup_callback
       @bind_keys()
