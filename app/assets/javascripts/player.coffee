@@ -60,6 +60,7 @@ class window.Player extends LivingThing
     Mousetrap.bind ',', => @pickup()
     Mousetrap.bind 'i', => @show_inventory()
     Mousetrap.bind 'd', => @drop()
+    Mousetrap.bind '>', => @descend()
 
   end_of_action: =>
     if @points_this_turn < @action_points and not window.Game.combat_mode()
@@ -92,6 +93,12 @@ class window.Player extends LivingThing
                     ", - Pick up"].join "\n"
   show_inventory: =>
     window.Game.log ["Inventory:"].concat(_.map @inventory, (item) -> item.to_inventory()).join "\n"
+
+  descend: =>
+    Mousetrap.reset()
+    window.Game._generate_map()
+    @points_this_turn = 0
+    @end_of_action()
 
   wait: =>
     Mousetrap.reset()

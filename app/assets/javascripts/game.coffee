@@ -13,7 +13,6 @@ $(document).ready ->
       $('#game-window').append(@display.getContainer())
       @scheduler = new ROT.Scheduler.Simple()
       @_generate_map()
-      @scheduler.add(@player, true)
       @engine = new ROT.Engine(@scheduler)
       @engine.start()
     drawBar: (start_x, y, end_x, color, percent) ->
@@ -28,12 +27,13 @@ $(document).ready ->
         c = if index == 0 then '>' else ' '
         $('#console-log').append("\n#{c} #{m}")
       $('#console-log').scrollTop($('#console-log')[0].scrollHeight)
-    map: {}
-    monsters: {}
-    items: {}
-    free_cells: []
-    visible_cells: {}
     _generate_map: ->
+      @map = {}
+      @monsters = {}
+      @items = {}
+      @free_cells = []
+      @visible_cells = {}
+      @scheduler.clear()
       digger = new ROT.Map.Digger(80, 24, dugPercentage: .7)
       @free_cells = []
       digCallback = (x, y, value) =>
@@ -42,7 +42,9 @@ $(document).ready ->
         @map[new_cell.to_s()] = new_cell
         @free_cells.push(new_cell)
       digger.create digCallback
-      @player = new Player(_.sample(@free_cells))
+      @player ||= new Player(_.sample(@free_cells))
+      @player.move_to(_.sample(@free_cells))
+      @scheduler.add(@player, true)
       @_create_monster(Gridbug)
       @_create_monster(Gridbug)
       @_create_monster(RootDruid)
