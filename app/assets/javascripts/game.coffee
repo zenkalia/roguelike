@@ -12,7 +12,7 @@ $(document).ready ->
       @display = new ROT.Display({width: 80, height: 28})
       $('#game-window').append(@display.getContainer())
       @scheduler = new ROT.Scheduler.Simple()
-      @_generateMap()
+      @_generate_map()
       @scheduler.add(@player, true)
       @engine = new ROT.Engine(@scheduler)
       @engine.start()
@@ -33,7 +33,7 @@ $(document).ready ->
     items: {}
     free_cells: []
     visible_cells: {}
-    _generateMap: ->
+    _generate_map: ->
       digger = new ROT.Map.Digger(80, 24, dugPercentage: .7)
       @free_cells = []
       digCallback = (x, y, value) =>
@@ -42,7 +42,6 @@ $(document).ready ->
         @map[new_cell.to_s()] = new_cell
         @free_cells.push(new_cell)
       digger.create digCallback
-      @_generateBoxes()
       @player = new Player(_.sample(@free_cells))
       @_createMonster(Gridbug)
       @_createMonster(Gridbug)
@@ -97,11 +96,6 @@ $(document).ready ->
       item = window.Game.items[key]
       return item.draw() if item?
       window.Game.map[key].draw()
-    _generateBoxes: ->
-      for i in [0..10]
-        free_cell = _.sample(@free_cells)
-        free_cell.body = '*'
-        @ananas = free_cell.to_s() unless i
     _createMonster: (what) ->
       new_thing = new what(_.sample(@free_cells))
       @monsters[new_thing.to_s()] = new_thing
