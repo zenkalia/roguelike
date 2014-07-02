@@ -38,7 +38,7 @@ $(document).ready ->
       @free_cells = []
       digCallback = (x, y, value) =>
         return if value
-        new_cell = new Cell(x, y, '.', 'gray')
+        new_cell = new Cell(x, y, '.', '#ffffff')
         @map[new_cell.to_s()] = new_cell
         @free_cells.push(new_cell)
       digger.create digCallback
@@ -89,7 +89,7 @@ $(document).ready ->
           window.Game.draw(key)
           @visible_cells[key] = window.Game.map[key]
         else
-          window.Game.display.draw(x, y + @y_offset, '#', 'gray')
+          window.Game.display.draw(x, y + @y_offset, '#', '#ffffff')
       fov.compute(@player.x, @player.y, 120, fov_callback)
       window.Game.player.draw()
     draw: (key) ->
