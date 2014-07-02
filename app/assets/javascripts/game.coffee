@@ -43,16 +43,16 @@ $(document).ready ->
         @free_cells.push(new_cell)
       digger.create digCallback
       @player = new Player(_.sample(@free_cells))
-      @_createMonster(Gridbug)
-      @_createMonster(Gridbug)
-      @_createMonster(RootDruid)
-      @_createMonster(RootDruid)
-      @_createMonster(RootDruid)
-      @_createMonster(Bat)
-      @_createMonster(Bat)
-      @_createMonster(Bat)
-      @_createMonster(Knobgoblin)
-      @_createMonster(Knobgoblin)
+      @_create_monster(Gridbug)
+      @_create_monster(Gridbug)
+      @_create_monster(RootDruid)
+      @_create_monster(RootDruid)
+      @_create_monster(RootDruid)
+      @_create_monster(Bat)
+      @_create_monster(Bat)
+      @_create_monster(Bat)
+      @_create_monster(Knobgoblin)
+      @_create_monster(Knobgoblin)
       pot = new Potion(_.sample(@free_cells))
       @items[pot.to_s()] = pot
       pot = new Potion(_.sample(@free_cells))
@@ -96,7 +96,7 @@ $(document).ready ->
       item = window.Game.items[key]
       return item.draw() if item?
       window.Game.map[key].draw()
-    _createMonster: (what) ->
+    _create_monster: (what) ->
       new_thing = new what(_.sample(@free_cells))
       new_thing = new what(_.sample(@free_cells)) while @monsters[new_thing.to_s()]
       @monsters[new_thing.to_s()] = new_thing
