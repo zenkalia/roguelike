@@ -19,6 +19,7 @@ class window.Cell
     lateral + diagonal * 1.4
 
   __shade_color: (color, percent) ->
+    percent = 100 if percent > 100
     R = parseInt(color.substring(1,3),16)
     G = parseInt(color.substring(3,5),16)
     B = parseInt(color.substring(5,7),16)
@@ -27,9 +28,9 @@ class window.Cell
     G = parseInt(G * (100 - percent) / 100)
     B = parseInt(B * (100 - percent) / 100)
 
-    R = if R<255 then R else 255
-    G = if G<255 then G else 255
-    B = if B<255 then B else 255
+    R = 255 if R > 255
+    G = 255 if G > 255
+    B = 255 if B > 255
 
     RR = if (R.toString(16).length==1) then "0"+R.toString(16) else R.toString(16)
     GG = if (G.toString(16).length==1) then "0"+G.toString(16) else G.toString(16)
