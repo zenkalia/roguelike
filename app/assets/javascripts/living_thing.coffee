@@ -9,11 +9,12 @@ class window.LivingThing extends Cell
   color: ->
     centz = @hp / @max_hp
     if centz > .7
-      return 'lightcyan'
+      @__color = '#e0ffff'
     else if centz > .3
-      return 'lemonchiffon'
+      @__color = '#fffacd'
     else
-      return 'indianred'
+      @__color = '#cd5c5c'
+    super
   draw: =>
     @aggro = true
     super()
