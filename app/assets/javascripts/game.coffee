@@ -98,6 +98,7 @@ $(document).ready ->
       window.Game.map[key].draw()
     _createMonster: (what) ->
       new_thing = new what(_.sample(@free_cells))
+      new_thing = new what(_.sample(@free_cells)) while @monsters[new_thing.to_s()]
       @monsters[new_thing.to_s()] = new_thing
       @scheduler.add(new_thing, true)
   }
