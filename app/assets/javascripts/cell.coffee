@@ -1,6 +1,7 @@
 class window.Cell
   constructor: (@x, @y, @body, color) ->
     @__color = color
+    @walkable = true
   color: ->
     @__shade_color(@__color, @distance(window.Game.player) * 2)
   to_s: ->

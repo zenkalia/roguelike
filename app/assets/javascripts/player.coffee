@@ -125,7 +125,7 @@ class window.Player extends LivingThing
     new_y = @y + dy
 
     new_cell = window.Game.map[new Cell(new_x, new_y).to_s()]
-    return @end_of_action() unless new_cell
+    return @end_of_action() unless new_cell?.walkable
 
     monster = window.Game.monsters[new_cell.to_s()]
     if monster?
