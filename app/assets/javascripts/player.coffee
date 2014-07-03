@@ -86,6 +86,7 @@ class window.Player extends LivingThing
                     "You can use either vimkeys or the numpad to control your character.  The shift modifier allows you to do a smash attack.",
                     "Other:",
                     "? - This help",
+                    "> - Descent",
                     "/ - Identify a character",
                     ". - End your turn (also spacebar)",
                     "i - Inventory",
@@ -96,8 +97,11 @@ class window.Player extends LivingThing
 
   descend: =>
     Mousetrap.reset()
-    window.Game._generate_map()
-    @points_this_turn = 0
+    if window.Game.stairs.to_s() == @to_s()
+      window.Game._generate_map()
+      @points_this_turn = 0
+    else
+      window.Game.log 'You see no stairs here'
     @end_of_action()
 
   wait: =>

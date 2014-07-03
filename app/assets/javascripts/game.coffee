@@ -42,6 +42,8 @@ $(document).ready ->
         @map[new_cell.to_s()] = new_cell
         @free_cells.push(new_cell)
       digger.create digCallback
+      @stairs = new Stairs _.sample(@free_cells)
+      @map[@stairs.to_s()] = @stairs
       @player ||= new Player(_.sample(@free_cells))
       @player.move_to(_.sample(@free_cells))
       @scheduler.add(@player, true)
