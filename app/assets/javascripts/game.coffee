@@ -38,7 +38,7 @@ $(document).ready ->
       @free_cells = []
       digCallback = (x, y, value) =>
         return if value
-        new_cell = new Cell(x, y, '.', 'gray')
+        new_cell = new Cell(x, y, '.', '#ffffff')
         @map[new_cell.to_s()] = new_cell
         @free_cells.push(new_cell)
       digger.create digCallback
@@ -79,17 +79,17 @@ $(document).ready ->
       if window.Game.combat_mode()
         window.Game.display.drawText(40, 2, '%c{red}IN COMBAT')
       light_passes = (x, y) ->
-        not not window.Game.map[new Cell(x, y).to_s()]
+        window.Game.map[new Cell(x, y).to_s()]?.walkable
       @visible_cells = {}
       fov = new ROT.FOV.PreciseShadowcasting(light_passes)
       fov_callback = (x, y, r, visibility) =>
         light = light_passes(x, y)
+        key = "#{x},#{y}"
         if light
-          key = "#{x},#{y}"
-          window.Game.draw(key)
           @visible_cells[key] = window.Game.map[key]
         else
-          window.Game.display.draw(x, y + @y_offset, '#', 'gray')
+          @map[key] ||= new Wall(x, y, '#ffffff')
+        @draw(key)
       fov.compute(@player.x, @player.y, 120, fov_callback)
       window.Game.player.draw()
     draw: (key) ->

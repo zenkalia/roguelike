@@ -15,7 +15,7 @@ class window.Monster extends LivingThing
   step_toward: (target_cell) ->
     passableCallback = (x, y) =>
       key = "#{x},#{y}"
-      isnt_wall = key of window.Game.map # check it's a walkable cell
+      isnt_wall = window.Game.map[key]?.walkable
       is_monster = key of window.Game.monsters
       isnt_wall and (key == @to_s() or !is_monster)
     astar = new ROT.Path.AStar(target_cell.x, target_cell.y, passableCallback, {topology: @topology})

@@ -11,9 +11,9 @@ class window.Bat extends Monster
       d = @distance(cell)
       is_player = window.Game.player.to_s() == cell.to_s()
       is_monster = cell.to_s() of window.Game.monsters
-      d < 1.5 and d > 0 and not is_player and not is_monster
+      d < 1.5 and d > 0 and not is_player and not is_monster and cell?.walkable
     adjacent_cells = window.Game.free_cells.filter is_adjacent
-    @.move_to(_.sample(adjacent_cells)) if adjacent_cells.length > 1
+    @.move_to(_.sample(adjacent_cells)) if _.some adjacent_cells
   go_for_blood: =>
     if @points_this_turn > 3
       @move_randomly()
