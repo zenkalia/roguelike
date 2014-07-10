@@ -10,6 +10,8 @@ class window.Player extends LivingThing
     @heavy_attack_power = 8
     @inventory = []
     @next_inventory_char = 'a'
+    @regen_bank = 0
+    @regen_per_turn = .27
   bump_inventory_char: =>
     return @next_inventory_char = 'a' if @next_inventory_char == 'z'
     @next_inventory_char = String.fromCharCode(@next_inventory_char.charCodeAt(0) + 1)
@@ -69,7 +71,10 @@ class window.Player extends LivingThing
       window.Game.engine.unlock()
     else if @points_this_turn < 1
       window.Game.tick()
-      @hp += _.random(0, Math.floor(@max_hp / 15))
+      @regen_bank += @regen_per_turn
+      gain_this_turn = Math.floor @regen_bank
+      @hp += gain_this_turn
+      @regen_bank -= gain_this_turn
       @hp = _.min [@hp, @max_hp]
       @rooted = false
       window.Game.engine.unlock()
