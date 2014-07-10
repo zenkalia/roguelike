@@ -16,10 +16,16 @@ class window.Player extends LivingThing
     return @next_inventory_char = 'a' if @next_inventory_char == 'z'
     @next_inventory_char = String.fromCharCode(@next_inventory_char.charCodeAt(0) + 1)
   act: =>
-    @bind_keys()
-    @points_this_turn = @action_points
-    window.Game.draw_whole_map()
-    window.Game.engine.lock()
+    if @hp <= 0
+      window.Game.log "You're DEAD!"
+      $('body').append($('#death_song').html())
+      window.Game.engine.lock()
+      window.Game.scheduler.clear()
+    else
+      @bind_keys()
+      @points_this_turn = @action_points
+      window.Game.draw_whole_map()
+      window.Game.engine.lock()
   decrement_action_points: (points) ->
     @points_this_turn -= points
   bind_keys: =>

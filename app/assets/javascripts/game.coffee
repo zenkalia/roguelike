@@ -94,11 +94,6 @@ $(document).ready ->
         @draw(key)
       fov.compute(@player.x, @player.y, 120, fov_callback)
       window.Game.player.draw()
-      if window.Game.player.hp <= 0
-        window.Game.log "You're DEAD!"
-        $('body').append($('#death_song').html())
-        @scheduler.clear()
-        @engine.lock()
     draw: (key) ->
       monster = window.Game.monsters[key]
       return monster.draw() if monster?
