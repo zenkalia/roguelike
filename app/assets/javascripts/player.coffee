@@ -64,19 +64,18 @@ class window.Player extends LivingThing
     Mousetrap.bind 'd', => @drop()
     Mousetrap.bind '>', => @descend()
 
+  regen: =>
+    @regen_bank += @regen_per_turn
+    gain_this_turn = Math.floor @regen_bank
+    @hp += gain_this_turn
+    @regen_bank -= gain_this_turn
+    @hp = _.min [@hp, @max_hp]
+
   end_of_action: =>
-    if @points_this_turn < @action_points and not window.Game.combat_mode()
+    if (@points_this_turn < @action_points and not window.Game.combat_mode()) or @points_this_turn < 1
       window.Game.tick()
-      window.Game.player.rooted = false
-      window.Game.engine.unlock()
-    else if @points_this_turn < 1
-      window.Game.tick()
-      @regen_bank += @regen_per_turn
-      gain_this_turn = Math.floor @regen_bank
-      @hp += gain_this_turn
-      @regen_bank -= gain_this_turn
-      @hp = _.min [@hp, @max_hp]
       @rooted = false
+      @regen()
       window.Game.engine.unlock()
     else
       @bind_keys()
