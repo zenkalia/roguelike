@@ -176,6 +176,9 @@ class window.Player extends LivingThing
       window.Game.log 'Not enough action points.'
     @end_of_action()
   drop: =>
+    if window.Game.items[@to_s()]
+      window.Game.log 'There is something there already.'
+      return
     Mousetrap.reset()
     window.Game.log 'What would you like to drop?'
     lookup_callback = (e) =>
