@@ -98,7 +98,7 @@ $(document).ready ->
         window.Game.log "You're DEAD!"
         $('body').append($('#death_song').html())
         @scheduler.clear()
-        @engine.stop()
+        @engine.lock()
     draw: (key) ->
       monster = window.Game.monsters[key]
       return monster.draw() if monster?
