@@ -189,6 +189,7 @@ class window.Player extends LivingThing
         delete @inventory[@inventory.indexOf(item)]
         @inventory = _.compact @inventory
         item.move_to @
+        window.Game.log "You dropped #{item.name}."
         window.Game.items[@to_s()] = item
       @acting = true
       $(document).off "keypress", 'body', lookup_callback
