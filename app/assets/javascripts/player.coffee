@@ -70,6 +70,8 @@ class window.Player extends LivingThing
     else if @points_this_turn < 1
       window.Game.tick()
       @hp += _.random(0, Math.floor(@max_hp / 15))
+      @hp = _.min [@hp, @max_hp]
+      @rooted = false
       window.Game.engine.unlock()
     else
       @bind_keys()
@@ -130,6 +132,7 @@ class window.Player extends LivingThing
     new_cell = window.Game.map[new Cell(new_x, new_y).to_s()]
     return @end_of_action() unless new_cell?.walkable
 
+    @decrement_action_points 1
     monster = window.Game.monsters[new_cell.to_s()]
     if monster?
       damage = @hit monster
@@ -137,8 +140,6 @@ class window.Player extends LivingThing
         window.Game.log "You hit the #{monster.name}."
       else
         window.Game.log "You miss the #{monster.name}."
-
-      @decrement_action_points 1
     else
       if @rooted
         if _.random(1) > .6
@@ -151,7 +152,6 @@ class window.Player extends LivingThing
       @.move_to new_cell
       item = window.Game.items[@to_s()]
       window.Game.log "There is a #{item.name} here." if item
-      @decrement_action_points 1
     @end_of_action()
   smash: (dx, dy) =>
     Mousetrap.reset()
