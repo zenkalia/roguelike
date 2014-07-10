@@ -69,6 +69,7 @@ class window.Player extends LivingThing
       window.Game.engine.unlock()
     else if @points_this_turn < 1
       window.Game.tick()
+      @hp += _.random(0, Math.floor(@max_hp / 15))
       window.Game.engine.unlock()
     else
       @bind_keys()
