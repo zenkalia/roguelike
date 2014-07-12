@@ -13,6 +13,7 @@ class window.Player extends LivingThing
     @regen_bank = 0
     @regen_per_turn = .27
     @floor = 0
+    @out_of_combat_count = 0
   bump_inventory_char: =>
     return @next_inventory_char = 'a' if @next_inventory_char == 'z'
     @next_inventory_char = String.fromCharCode(@next_inventory_char.charCodeAt(0) + 1)
@@ -79,6 +80,13 @@ class window.Player extends LivingThing
     @hp = _.min [@hp, @max_hp]
 
   end_of_action: =>
+    if window.Game.combat_mode()
+      @out_of_combat_count = 0
+    else
+      @out_of_combat_count += 1
+    if @out_of_combat_count >= 10
+      window.Game.spawn_monster()
+      @out_of_combat_count = 0
     if (@points_this_turn < @action_points and not window.Game.combat_mode()) or @points_this_turn < 1
       window.Game.tick()
       @rooted = false
@@ -87,6 +95,7 @@ class window.Player extends LivingThing
     else
       @bind_keys()
     window.Game.draw_whole_map()
+
   print_help: =>
     window.Game.log ["Welcome to Mike's roguelike!",
                     "Movement/Combat:",

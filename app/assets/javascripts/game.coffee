@@ -54,7 +54,7 @@ $(document).ready ->
       @player ||= new Player(_.sample(@free_cells))
       @player.move_to(_.sample(@free_cells))
       @scheduler.add(@player, true)
-      _.each window.MonstersByFloor[@player.floor] ? _.last(window.MonstersByFloor), (monster) =>
+      _.each @monsters_this_floor(), (monster) =>
         @_create_monster(monster)
       pot = new Potion(_.sample(@free_cells))
       @items[pot.to_s()] = pot
@@ -99,10 +99,14 @@ $(document).ready ->
       item = window.Game.items[key]
       return item.draw() if item?
       window.Game.map[key].draw()
-    _create_monster: (what) ->
+    _create_monster: (what, visible = false) ->
       new_thing = new what(_.sample(@free_cells))
-      new_thing = new what(_.sample(@free_cells)) while @monsters[new_thing.to_s()]
+      new_thing = new what(_.sample(@free_cells)) while @monsters[new_thing.to_s()] or (visible and @visible_cells[new_thing.to_s()])
       @monsters[new_thing.to_s()] = new_thing
       @scheduler.add(new_thing, true)
+    spawn_monster: ->
+      @_create_monster(_.sample(@monsters_this_floor()), true)
+    monsters_this_floor: ->
+      window.MonstersByFloor[@player.floor] ? _.last(window.MonstersByFloor)
   }
   Game.init()
