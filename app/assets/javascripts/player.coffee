@@ -12,6 +12,7 @@ class window.Player extends LivingThing
     @next_inventory_char = 'a'
     @regen_bank = 0
     @regen_per_turn = .27
+    @floor = 0
   bump_inventory_char: =>
     return @next_inventory_char = 'a' if @next_inventory_char == 'z'
     @next_inventory_char = String.fromCharCode(@next_inventory_char.charCodeAt(0) + 1)
@@ -109,6 +110,7 @@ class window.Player extends LivingThing
   descend: =>
     Mousetrap.reset()
     if window.Game.stairs.to_s() == @to_s()
+      @floor += 1
       window.Game._generate_map()
       @points_this_turn = 0
     else

@@ -1,9 +1,16 @@
 #= require gridbug
 #= require bat
 #= require knobgoblin
+#= require root_druid
 #= require player
 
+
 $(document).ready ->
+  window.MonstersByFloor = [
+    [Gridbug, Gridbug, Bat, Bat, Bat, Knobgoblin, Knobgoblin, Gridbug, Bat],
+    [RootDruid, RootDruid, Bat, Knobgoblin, Knobgoblin, RootDruid, Gridbug, Gridbug, Knobgoblin]
+  ]
+
   window.Game = {
     y_offset:
       4
@@ -47,16 +54,8 @@ $(document).ready ->
       @player ||= new Player(_.sample(@free_cells))
       @player.move_to(_.sample(@free_cells))
       @scheduler.add(@player, true)
-      @_create_monster(Gridbug)
-      @_create_monster(Gridbug)
-      @_create_monster(RootDruid)
-      @_create_monster(RootDruid)
-      @_create_monster(RootDruid)
-      @_create_monster(Bat)
-      @_create_monster(Bat)
-      @_create_monster(Bat)
-      @_create_monster(Knobgoblin)
-      @_create_monster(Knobgoblin)
+      _.each window.MonstersByFloor[@player.floor] ? _.last(window.MonstersByFloor), (monster) =>
+        @_create_monster(monster)
       pot = new Potion(_.sample(@free_cells))
       @items[pot.to_s()] = pot
       pot = new Potion(_.sample(@free_cells))
