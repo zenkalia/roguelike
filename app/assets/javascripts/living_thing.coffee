@@ -29,11 +29,23 @@ class window.LivingThing extends Cell
     return 0 if ROT.RNG.getUniform() > @to_hit()
     damage = _.max [1, Math.round ROT.RNG.getNormal(@light_attack_power, @light_attack_power / 5)]
     target.hp -= damage
+    target.bleed()
     damage
   heavy_hit: (target) ->
     return 0 if ROT.RNG.getUniform() > @to_hit()
     damage = _.max [1, Math.round ROT.RNG.getNormal(@heavy_attack_power, @heavy_attack_power / 5)]
     target.hp -= damage
+    target.bleed()
+    target.bleed()
     damage
   dead: ->
     @hp <= 0
+  bleed: ->
+    blood_color = ->
+      r = _.sample(['8', '9', '0', 'a', 'b', 'c', 'd', 'e'])
+      "#{r}#{r}0000"
+    return unless _.random(0, 1) == 0
+    window.Game.map[@to_s()].__color = blood_color()
+    return unless _.random(0, 1) == 0
+    splash = "#{@x + _.random(-1, 1)},#{@y + _.random(-1, 1)}"
+    window.Game.map[splash].__color = blood_color()
