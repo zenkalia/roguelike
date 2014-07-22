@@ -42,7 +42,7 @@ class window.LivingThing extends Cell
     @hp <= 0
   bleed: ->
     blood_color = ->
-      r = _.sample(['8', '9', '0', 'a', 'b', 'c', 'd', 'e'])
+      r = _.sample(['8', '9', 'a', 'b', 'c', 'd', 'e'])
       "##{r}#{r}#{_.random(0, 3)}#{_.random(0, 3)}#{_.random(0, 3)}#{_.random(0, 3)}"
     return unless _.random(0, 1) == 0
     window.Game.map[@to_s()].__color = blood_color()
