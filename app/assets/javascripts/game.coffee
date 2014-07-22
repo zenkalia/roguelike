@@ -78,7 +78,8 @@ $(document).ready ->
       window.Game.display.drawText(0, 1, "AP: #{@player.points_this_turn}/#{@player.action_points}")
       window.Game.drawBar(12,1,79,'blue', @player.points_this_turn / @player.action_points)
       if window.Game.combat_mode()
-        window.Game.display.drawText(40, 2, '%c{red}IN COMBAT')
+        window.Game.display.drawText(35, 2, '%c{red}IN COMBAT')
+      window.Game.display.drawText(25, 2, "Dlvl: #{@player.floor + 1}")
       light_passes = (x, y) ->
         window.Game.map[new Cell(x, y).to_s()]?.walkable
       @visible_cells = {}
