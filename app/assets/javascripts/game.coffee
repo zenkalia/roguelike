@@ -7,6 +7,7 @@
 
 $(document).ready ->
   window.MonstersByFloor = [
+    [Angel, Angel, Angel, Angel, Angel, Angel, Angel],
     [Gridbug, Gridbug, Bat, Bat, Bat, Knobgoblin, Knobgoblin, Gridbug, Bat],
     [RootDruid, RootDruid, Bat, Knobgoblin, Knobgoblin, RootDruid, Gridbug, Gridbug, Knobgoblin]
   ]
@@ -92,7 +93,7 @@ $(document).ready ->
         else
           @map[key] ||= new Wall(x, y, '#ffffff')
         @draw(key)
-      fov.compute(@player.x, @player.y, 120, fov_callback)
+      fov.compute(@player.x, @player.y, @player.vision_range(), fov_callback)
       window.Game.player.draw()
     draw: (key) ->
       monster = window.Game.monsters[key]
