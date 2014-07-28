@@ -7,9 +7,9 @@
 
 $(document).ready ->
   window.MonstersByFloor = [
-    [Angel, Angel, Angel, Angel, Angel, Angel, Angel],
     [Gridbug, Gridbug, Bat, Bat, Bat, Knobgoblin, Knobgoblin, Gridbug, Bat],
-    [RootDruid, RootDruid, Bat, Knobgoblin, Knobgoblin, RootDruid, Gridbug, Gridbug, Knobgoblin]
+    [RootDruid, RootDruid, Bat, Knobgoblin, Knobgoblin, RootDruid, Gridbug, Gridbug, Knobgoblin],
+    [RootDruid, RootDruid, Bat, Knobgoblin, Knobgoblin, Gridbug, Gridbug, Knobgoblin, Angel, Angel]
   ]
 
   window.Game = {
