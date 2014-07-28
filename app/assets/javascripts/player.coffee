@@ -17,6 +17,8 @@ class window.Player extends LivingThing
   bump_inventory_char: =>
     return @next_inventory_char = 'a' if @next_inventory_char == 'z'
     @next_inventory_char = String.fromCharCode(@next_inventory_char.charCodeAt(0) + 1)
+  vision_range: =>
+    if @blinded then 2 else 120
   act: =>
     if @hp <= 0
       window.Game.log "You're DEAD!"
@@ -90,6 +92,7 @@ class window.Player extends LivingThing
     if (@points_this_turn < @action_points and not window.Game.combat_mode()) or @points_this_turn < 1
       window.Game.tick()
       @rooted = false
+      @blinded = false
       @regen()
       window.Game.engine.unlock()
     else
