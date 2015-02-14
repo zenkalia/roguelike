@@ -14,6 +14,7 @@ class window.Player extends LivingThing
     @regen_per_turn = .27
     @floor = 0
     @out_of_combat_count = 0
+    @delayed_attackers = []
   bump_inventory_char: =>
     return @next_inventory_char = 'a' if @next_inventory_char == 'z'
     @next_inventory_char = String.fromCharCode(@next_inventory_char.charCodeAt(0) + 1)
@@ -94,6 +95,8 @@ class window.Player extends LivingThing
       @rooted = false
       @blinded = false
       @regen()
+      _.each @delayed_attackers, (attacker) -> attacker.delayed_hit()
+      @delayed_attackers = []
       window.Game.engine.unlock()
     else
       @bind_keys()
@@ -231,6 +234,7 @@ class window.Player extends LivingThing
         x: 'X - Gridbug - these electronically based creatures are not native to this universe'
         b: 'B - Bat - the things vampires come from'
         r: 'R - Root Druid - one with nature, watch your footing'
+        p: 'P - Purple Caster Minion - minion op! rito plz!'
         '%': '% - Stairs'
         '#': '# - Wall'
         '.': '. - Floor'
