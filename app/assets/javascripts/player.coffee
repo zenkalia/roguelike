@@ -234,6 +234,7 @@ class window.Player extends LivingThing
         x: 'X - Gridbug - these electronically based creatures are not native to this universe'
         b: 'B - Bat - the things vampires come from'
         r: 'R - Root Druid - one with nature, watch your footing'
+        s: 'S - Sliver Queen - She\'s pissed and she\'s preggers\ns - Sliver - before there were zerglings...'
         p: 'P - Purple Caster Minion - minion op! rito plz!'
         '%': '% - Stairs'
         '#': '# - Wall'
