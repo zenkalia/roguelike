@@ -34,8 +34,8 @@ class window.Monster extends LivingThing
     coord_candidates = []
     coord_candidates.push [-2, -1]
     coord_candidates.push [-2, +1]
-    coord_candidates.push [-1, -1]
-    coord_candidates.push [-1, +1]
+    coord_candidates.push [-1, -2]
+    coord_candidates.push [-1, +2]
     coord_candidates.push [+2, -1]
     coord_candidates.push [+2, +1]
     coord_candidates.push [+1, -2]
@@ -45,7 +45,8 @@ class window.Monster extends LivingThing
 
     _.map coord_candidates, (coord) =>
       candidate = new Cell(@.x + coord[0], @.y + coord[1])
-      candidates.push candidate if window.Game.map[candidate.to_s()]?.walkable
+      if window.Game.map[candidate.to_s()]?.walkable and !window.Game.monsters[candidate.to_s()] and window.Game.player.to_s() != candidate.to_s()
+        candidates.push candidate
 
     _.map candidates, (candidate) ->
       candidate.distance = target_cell.distance(candidate)
