@@ -30,6 +30,29 @@ class window.Monster extends LivingThing
     path.shift()
     new_cell = path[0]
     @.move_to(new_cell)
+  hop_toward: (target_cell) ->
+    coord_candidates = []
+    coord_candidates.push [-2, -1]
+    coord_candidates.push [-2, +1]
+    coord_candidates.push [-1, -1]
+    coord_candidates.push [-1, +1]
+    coord_candidates.push [+2, -1]
+    coord_candidates.push [+2, +1]
+    coord_candidates.push [+1, -2]
+    coord_candidates.push [+1, +2]
+
+    candidates = []
+
+    _.map coord_candidates, (coord) =>
+      candidate = new Cell(@.x + coord[0], @.y + coord[1])
+      candidates.push candidate if window.Game.map[candidate.to_s()]?.walkable
+
+    _.map candidates, (candidate) ->
+      candidate.distance = target_cell.distance(candidate)
+
+    candidates = _.sortBy(candidates, (candidate) -> candidate.distance)
+    @.move_to candidates[0]
+
   end_of_blood: =>
     if @points_this_turn > 0
       if @to_s() of window.Game.visible_cells

@@ -236,6 +236,7 @@ class window.Player extends LivingThing
         r: 'R - Root Druid - one with nature, watch your footing'
         s: 'S - Sliver Queen - She\'s pissed and she\'s preggers\ns - Sliver - before there were zerglings...'
         p: 'P - Purple Caster Minion - minion op! rito plz!'
+        z: 'Z - Zebra - It moves a lot like a horse'
         '%': '% - Stairs'
         '#': '# - Wall'
         '.': '. - Floor'

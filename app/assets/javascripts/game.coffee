@@ -7,7 +7,7 @@
 
 $(document).ready ->
   window.MonstersByFloor = [
-    [SliverQueen, SliverQueen, SliverQueen],
+    [Zebra, Zebra, Zebra],
     [Gridbug, Gridbug, Bat, Bat, Bat, Knobgoblin, Knobgoblin, Gridbug, Bat],
     [RootDruid, RootDruid, Bat, Knobgoblin, Knobgoblin, RootDruid, Gridbug, Gridbug, Knobgoblin],
     [RootDruid, RootDruid, Bat, Knobgoblin, Knobgoblin, Gridbug, Gridbug, Knobgoblin, Angel, Angel]
